@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>猫猫搭档的聊天室</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="phone">
+    <div class="top-bar">
+        <div class="partner-info">
+            <div class="partner-name">
+                <span id="partnerName">沈星回</span>
+                <button class="edit-name" id="editNameBtn">✎</button>
+            </div>
+            <div class="partner-status" id="partnerStatus">
+                <span id="onlineStatus">在线</span>
+                <span id="leisureStatus"></span>
+            </div>
+            <div class="typing-status" id="typingStatus"></div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="sidebar-tabs" id="sidebarTabs">
+            <div class="side-tab active" data-page="chat-page">💬<br>聊天</div>
+            <div class="side-tab" data-page="card-page">📚<br>字卡</div>
+            <div class="side-tab" data-page="leisure-page">🎯<br>休闲</div>
+            <div class="side-tab" data-page="manage-page">⚙️<br>设置</div>
+            <div class="side-tab update-tab" data-page="update-page">📋<br>更新</div>
+        </div>
+        <button class="toggle-sidebar-btn" id="toggleSidebarBtn" title="隐藏/展开菜单">◀</button>
+
+        <div class="content-panel">
+            <div id="chat-page" class="page active">
+                <div class="chat-area" id="chatArea"></div>
+                <div class="bottom-bar">
+                    <div class="input-row">
+                        <button class="dice-btn" id="diceBtn">🎲</button>
+                        <input type="text" id="msgInput" placeholder="输入消息...">
+                        <button id="sendMsgBtn">发送</button>
+                    </div>
+                    <div class="bottom-actions" id="bottomActions">
+                        <button class="action-btn" id="openEmojiBtn">😊 通用表情</button>
+                        <button class="action-btn" id="openStickerBtn1">🐱 猫猫搭档1</button>
+                        <button class="action-btn" id="openStickerBtn2">🐱 猫猫搭档2</button>
+                        <button class="plus-btn" id="plusBtn">+</button>
+                        <input type="file" id="fileInput" class="file-input-hidden" multiple accept="image/*,video/*,audio/*,application/*">
+                    </div>
+                </div>
+            </div>
+
+            <div id="card-page" class="page">
+                <div class="scroll-page">
+                    <div id="groupsContainer"></div>
+                    <hr>
+                    <div class="card-input-area">
+                        <textarea id="cardBulkInput" class="card-textarea" rows="5" placeholder="每行一条回复内容"></textarea>
+                        <div class="add-method-buttons">
+                            <button id="loadDefaultBtn">📖 加载默认字卡</button>
+                            <button id="addMultiLineBtn">🌸 批量添加回复</button>
+                            <button id="clearTextareaBtn" class="danger-btn">🗑️ 清空全部内容</button>
+                        </div>
+                        <div class="small-note">💡 先点【加载默认字卡】预览，再点【批量添加回复】选择分组</div>
+                    </div>
+                    <button id="addGroupBtn">+ 新建分组</button>
+                    <hr>
+                    <h4>⚡ 沈星回回复设置</h4>
+                    <div class="setting-row"><label>回复最慢时长(秒):</label><input type="number" id="maxDelaySec" value="300"></div>
+                    <div class="setting-row"><label>回复最快时长(秒):</label><input type="number" id="minDelaySec" value="1"></div>
+                    <div class="setting-row"><label>主动发消息间隔(分钟):</label><input type="number" id="activeDelayMin" value="5"></div>
+                    <div class="reply-preview">📚 当前字卡库共有 <span id="totalReplyCount">0</span> 条回复</div>
+                    <button id="saveReplySettings">保存设置</button>
+                </div>
+            </div>
+
+            <div id="leisure-page" class="page">
+                <div class="leisure-page" id="leisureContainer"></div>
+            </div>
+
+            <div id="manage-page" class="page">
+                <div class="scroll-page">
+                    <h4>👤 个人设置</h4>
+                    <div class="setting-row"><label>我的昵称:</label><input type="text" id="myNickname" placeholder="user"></div>
+                    <div class="setting-row"><label>我的头像文字:</label><input type="text" id="myAvatarText" placeholder="user" maxlength="6"></div>
+                    <div class="setting-row"><label>对方昵称:</label><input type="text" id="partnerNickname" placeholder="沈星回"></div>
+                    <div class="setting-row"><label>对方头像文字:</label><input type="text" id="partnerAvatarText" placeholder="Star" maxlength="6"></div>
+                    <button id="saveProfileBtn">💾 保存设置</button>
+                    <hr>
+                    <h4>📦 全部数据导入/导出</h4>
+                    <div style="margin: 12px 0; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="file" id="importFileInput" accept=".json,.txt">
+                        <button id="importDataBtn">导入数据</button>
+                        <button id="exportFullData">导出数据(.json)</button>
+                    </div>
+                    <hr>
+                    <h4>🗑️ 管理消息</h4>
+                    <button id="clearAllChats" class="danger-btn">清空全部聊天记录</button>
+                </div>
+            </div>
+
+            <div id="update-page" class="page">
+                <div class="scroll-page">
+                    <h3>📋 网站设计说明文档</h3>
+                    <div class="update-time">📅 最后更新：2026年1月19日</div>
+                    <div class="update-content">
+                        <p><strong>猫猫搭档的聊天室</strong> - 私人梦幻聊天网页</p>
+                        <h4>🎯 休闲板块</h4>
+                        <p>沈星回会随机进行休闲活动，显示在状态栏</p>
+                        <p>点击状态栏可选择操作</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="data/defaultCards.js"></script>
+<script src="modules/utils.js"></script>
+<script src="modules/chat.js"></script>
+<script src="modules/card.js"></script>
+<script src="modules/leisure.js?v=2"></script>
+<script src="modules/sync.js"></script> 
+<script src="modules/profile.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
