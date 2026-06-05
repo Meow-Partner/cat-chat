@@ -1,0 +1,9 @@
+{
+  "name": "猫猫搭档聊天室",
+  "short_name": "猫猫搭档",
+  "start_url": "/cat-chat/",
+  "display": "standalone",
+  "theme_color": "#d98ab7",
+  "background_color": "#f8c9d4",
+  "icons": []
+}
