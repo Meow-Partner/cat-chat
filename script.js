@@ -358,34 +358,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function updateCardsFromGitHub() {
-        try {
-            const response = await fetch(DEFAULT_CARDS_URL);
-            const remoteCards = await response.json();
-            let addedCount = 0;
-            
-            for (let groupName in remoteCards) {
-                if (!userGroups[groupName]) {
-                    userGroups[groupName] = [];
-                }
-                for (let card of remoteCards[groupName]) {
-                    if (!userGroups[groupName].includes(card)) {
-                        userGroups[groupName].push(card);
-                        addedCount++;
-                    }
+    try {
+        const response = await fetch(DEFAULT_CARDS_URL);
+        const remoteCards = await response.json();
+        let totalAdded = 0;
+        
+        for (let groupName in remoteCards) {
+            // 如果分组不存在，先创建
+            if (!userGroups[groupName]) {
+                userGroups[groupName] = [];
+            }
+            // 添加字卡（去重）
+            for (let card of remoteCards[groupName]) {
+                if (!userGroups[groupName].includes(card)) {
+                    userGroups[groupName].push(card);
+                    totalAdded++;
                 }
             }
-            
-            if (addedCount > 0) {
-                renderGroups();
-                saveGroups();
-                alert(`已添加 ${addedCount} 条新字卡`);
-            } else {
-                alert('字卡已是最新');
-            }
-        } catch(e) {
-            alert('更新失败：网络错误');
         }
+        
+        // 刷新界面并保存
+        renderGroups();
+        saveGroups();
+        
+        if (totalAdded > 0) {
+            alert(`成功添加 ${totalAdded} 条字卡到 ${Object.keys(remoteCards).join('、')} 分组`);
+        } else {
+            alert('字卡已是最新，无需更新');
+        }
+    } catch(e) {
+        alert('更新失败：网络错误\n' + e.message);
     }
+}
 
     const updateBtn = document.getElementById('updateCardsBtn');
     if (updateBtn) {
