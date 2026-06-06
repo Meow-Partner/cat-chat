@@ -415,3 +415,10 @@ if (guideUpdateBtn) {
 }
 
 });
+
+// 页面加载完成后自动更新字卡
+setTimeout(() => {
+    if (typeof updateCardsFromGitHub === 'function') {
+        updateCardsFromGitHub();
+    }
+}, 2000);
