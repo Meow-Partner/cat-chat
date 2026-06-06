@@ -329,5 +329,67 @@ document.addEventListener('DOMContentLoaded', function() {
         initSync();
     }
 
-    console.log('✅ 页面初始化完成');
+      console.log('✅ 页面初始化完成');
+
+    // ========== GitHub 字卡同步 ==========
+    const DEFAULT_CARDS_URL = 'https://raw.githubusercontent.com/Meow-Partner/cat-chat/main/default_cards.json';
+
+    async function loadDefaultCardsFromGitHub() {
+        try {
+            const response = await fetch(DEFAULT_CARDS_URL);
+            const remoteCards = await response.json();
+            
+            for (let groupName in remoteCards) {
+                if (!userGroups[groupName]) {
+                    userGroups[groupName] = [];
+                }
+                for (let card of remoteCards[groupName]) {
+                    if (!userGroups[groupName].includes(card)) {
+                        userGroups[groupName].push(card);
+                    }
+                }
+            }
+            renderGroups();
+            saveGroups();
+            console.log('默认字卡加载完成');
+        } catch(e) {
+            console.log('加载默认字卡失败，使用本地字卡');
+        }
+    }
+
+    async function updateCardsFromGitHub() {
+        try {
+            const response = await fetch(DEFAULT_CARDS_URL);
+            const remoteCards = await response.json();
+            let addedCount = 0;
+            
+            for (let groupName in remoteCards) {
+                if (!userGroups[groupName]) {
+                    userGroups[groupName] = [];
+                }
+                for (let card of remoteCards[groupName]) {
+                    if (!userGroups[groupName].includes(card)) {
+                        userGroups[groupName].push(card);
+                        addedCount++;
+                    }
+                }
+            }
+            
+            if (addedCount > 0) {
+                renderGroups();
+                saveGroups();
+                alert(`已添加 ${addedCount} 条新字卡`);
+            } else {
+                alert('字卡已是最新');
+            }
+        } catch(e) {
+            alert('更新失败：网络错误');
+        }
+    }
+
+    const updateBtn = document.getElementById('updateCardsBtn');
+    if (updateBtn) {
+        updateBtn.onclick = updateCardsFromGitHub;
+    }
+
 });
