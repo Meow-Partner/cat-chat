@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initSync();
     }
 
-      console.log('✅ 页面初始化完成');
+    console.log('✅ 页面初始化完成');
 
     // ========== GitHub 字卡同步 ==========
     const DEFAULT_CARDS_URL = 'https://raw.githubusercontent.com/Meow-Partner/cat-chat/main/default_cards.json';
@@ -357,68 +357,68 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    async function updateCardsFromGitHub() {
-    try {
-        const response = await fetch(DEFAULT_CARDS_URL);
-        const remoteCards = await response.json();
-        let totalAdded = 0;
-        
-        for (let groupName in remoteCards) {
-            // 如果分组不存在，先创建
-            if (!userGroups[groupName]) {
-                userGroups[groupName] = [];
-            }
-            // 添加字卡（去重）
-            for (let card of remoteCards[groupName]) {
-                if (!userGroups[groupName].includes(card)) {
-                    userGroups[groupName].push(card);
-                    totalAdded++;
+    // 支持静默更新的版本
+    async function updateCardsFromGitHub(silent = false) {
+        try {
+            const response = await fetch(DEFAULT_CARDS_URL);
+            const remoteCards = await response.json();
+            let totalAdded = 0;
+            
+            for (let groupName in remoteCards) {
+                if (!userGroups[groupName]) {
+                    userGroups[groupName] = [];
+                }
+                for (let card of remoteCards[groupName]) {
+                    if (!userGroups[groupName].includes(card)) {
+                        userGroups[groupName].push(card);
+                        totalAdded++;
+                    }
                 }
             }
+            
+            if (totalAdded > 0) {
+                renderGroups();
+                saveGroups();
+                if (!silent) {
+                    alert(`成功添加 ${totalAdded} 条字卡到 ${Object.keys(remoteCards).join('、')} 分组`);
+                } else {
+                    console.log(`静默添加了 ${totalAdded} 条字卡`);
+                }
+            } else if (!silent) {
+                alert('字卡已是最新，无需更新');
+            }
+        } catch(e) {
+            if (!silent) alert('更新失败：网络错误\n' + e.message);
+            console.log('自动更新字卡失败');
         }
-        
-        // 刷新界面并保存
-        renderGroups();
-        saveGroups();
-        
-        if (totalAdded > 0) {
-            alert(`成功添加 ${totalAdded} 条字卡到 ${Object.keys(remoteCards).join('、')} 分组`);
-        } else {
-            alert('字卡已是最新，无需更新');
-        }
-    } catch(e) {
-        alert('更新失败：网络错误\n' + e.message);
     }
-}
 
-const githubUpdateBtn = document.getElementById('updateCardsBtn');
-if (githubUpdateBtn) {
-    githubUpdateBtn.onclick = updateCardsFromGitHub;
-}
+    const githubUpdateBtn = document.getElementById('updateCardsBtn');
+    if (githubUpdateBtn) {
+        githubUpdateBtn.onclick = () => updateCardsFromGitHub(false);
+    }
 
-// 更新说明按钮
-const guideUpdateBtn = document.getElementById('updateGuideBtn');
-if (guideUpdateBtn) {
-    guideUpdateBtn.onclick = () => {
-        alert(
-            '【更新步骤】\n\n' +
-            '1. 打开「一个木函」→ 网页转应用\n' +
-            '2. 网址填：\n   https://meow-partner.github.io/cat-chat/\n' +
-            '3. 应用名称：猫猫搭档\n' +
-            '4. 包名：com.cat.partner\n' +
-            '5. 版本号：每次 +1（如 1→2→3）\n' +
-            '6. 版本名：每次 +0.1（如 1.0→1.1→1.2）\n' +
-            '7. 生成 APK，覆盖安装\n\n' +
-            '✅ 包名固定不变，可覆盖安装，数据不丢失'
-        );
-    };
-}
+    // 更新说明按钮
+    const guideUpdateBtn = document.getElementById('updateGuideBtn');
+    if (guideUpdateBtn) {
+        guideUpdateBtn.onclick = () => {
+            alert(
+                '【更新步骤】\n\n' +
+                '1. 打开「一个木函」→ 网页转应用\n' +
+                '2. 网址填：\n   https://meow-partner.github.io/cat-chat/\n' +
+                '3. 应用名称：猫猫搭档\n' +
+                '4. 包名：com.cat.partner\n' +
+                '5. 版本号：每次 +1（如 1→2→3）\n' +
+                '6. 版本名：每次 +0.1（如 1.0→1.1→1.2）\n' +
+                '7. 生成 APK，覆盖安装\n\n' +
+                '✅ 包名固定不变，可覆盖安装，数据不丢失'
+            );
+        };
+    }
+
+    // 自动静默更新字卡（页面加载后 2 秒执行）
+    setTimeout(() => {
+        updateCardsFromGitHub(true);
+    }, 2000);
 
 });
-
-// 页面加载完成后自动更新字卡
-setTimeout(() => {
-    if (typeof updateCardsFromGitHub === 'function') {
-        updateCardsFromGitHub();
-    }
-}, 2000);
