@@ -396,11 +396,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateBtn.onclick = updateCardsFromGitHub;
     }
 
-        const updateBtn = document.getElementById('updateCardsBtn');
-    if (updateBtn) {
-        updateBtn.onclick = updateCardsFromGitHub;
-    }
-
     // 更新说明按钮
     const guideBtn = document.getElementById('updateGuideBtn');
     if (guideBtn) {
