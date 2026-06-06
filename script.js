@@ -391,27 +391,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 }
 
-    const updateBtn = document.getElementById('updateCardsBtn');
-    if (updateBtn) {
-        updateBtn.onclick = updateCardsFromGitHub;
-    }
+const githubUpdateBtn = document.getElementById('updateCardsBtn');
+if (githubUpdateBtn) {
+    githubUpdateBtn.onclick = updateCardsFromGitHub;
+}
 
-    // 更新说明按钮
-    const guideBtn = document.getElementById('updateGuideBtn');
-    if (guideBtn) {
-        guideBtn.onclick = () => {
-            alert(
-                '【更新步骤】\n\n' +
-                '1. 打开「一个木函」→ 网页转应用\n' +
-                '2. 网址填：\n   https://meow-partner.github.io/cat-chat/\n' +
-                '3. 应用名称：猫猫搭档\n' +
-                '4. 包名：com.cat.partner\n' +
-                '5. 版本号：每次 +1（如 1→2→3）\n' +
-                '6. 版本名：每次 +0.1（如 1.0→1.1→1.2）\n' +
-                '7. 生成 APK，覆盖安装\n\n' +
-                '✅ 包名固定不变，可覆盖安装，数据不丢失'
-            );
-        };
-    }
+// 更新说明按钮
+const guideUpdateBtn = document.getElementById('updateGuideBtn');
+if (guideUpdateBtn) {
+    guideUpdateBtn.onclick = () => {
+        alert(
+            '【更新步骤】\n\n' +
+            '1. 打开「一个木函」→ 网页转应用\n' +
+            '2. 网址填：\n   https://meow-partner.github.io/cat-chat/\n' +
+            '3. 应用名称：猫猫搭档\n' +
+            '4. 包名：com.cat.partner\n' +
+            '5. 版本号：每次 +1（如 1→2→3）\n' +
+            '6. 版本名：每次 +0.1（如 1.0→1.1→1.2）\n' +
+            '7. 生成 APK，覆盖安装\n\n' +
+            '✅ 包名固定不变，可覆盖安装，数据不丢失'
+        );
+    };
+}
 
 });
