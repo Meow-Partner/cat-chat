@@ -1,16 +1,10 @@
 // ========== Supabase 同步模块 ==========
 
-initSync();
-
-// ========== 主脚本入口 ==========
-
-// 页面切换
-const sideTabs = document.querySelectorAll('.side-tab');
-
-// 你的 Supabase 配置（已填入）
+// 你的 Supabase 配置
 const SUPABASE_URL = 'https://syskcocdlzaanehdpafo.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN5c2tjb2NkbHphYW5laGRwYWZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjQwMjMsImV4cCI6MjA5NjI0MDAyM30.itR2CBcDrFHr61oridrmBJlzY2vRd2QouzFkOn3Nhh4';
 
+// ✅ 变量声明放在最前面
 let supabaseClient = null;
 let currentDeviceId = null;
 
@@ -217,7 +211,6 @@ async function syncLeisureData() {
     }
     
     if (remote && remote.data) {
-        // 云端有数据，加载到本地
         try {
             for (const type in window.leisureData) {
                 if (remote.data[type]) {
@@ -231,7 +224,6 @@ async function syncLeisureData() {
             console.error('解析休闲数据失败:', e);
         }
     } else {
-        // 本地有数据，上传到云端
         const dataToUpload = {};
         for (const type in window.leisureData) {
             dataToUpload[type] = {
@@ -239,15 +231,10 @@ async function syncLeisureData() {
                 hisItems: window.leisureData[type].hisItems || []
             };
         }
-        const { error: insertError } = await supabase
-            .from('leisure_data')
-            .insert({
-                device_id: deviceId,
-                data: dataToUpload
-            });
-        if (insertError) {
-            console.error('上传休闲数据失败:', insertError);
-        }
+        await supabase.from('leisure_data').insert({
+            device_id: deviceId,
+            data: dataToUpload
+        });
     }
 }
 
@@ -367,3 +354,6 @@ async function initSync() {
     startAutoSync();
     setupAutoUpload();
 }
+
+// 自动启动
+initSync();
