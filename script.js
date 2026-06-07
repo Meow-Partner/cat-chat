@@ -1,5 +1,10 @@
 // ========== script.js · 猫猫搭档 · 最终完整版 ==========
-import { LocalNotifications } from '@capacitor/local-notifications';
+// import { LocalNotifications } from '@capacitor/local-notifications';  // 打包APK时再取消注释
+
+// 临时模拟一个 LocalNotifications 对象，避免浏览器报错
+const LocalNotifications = {
+    schedule: async () => { console.log('[模拟] 通知已发送（打包后生效）'); }
+};
 
 document.addEventListener('DOMContentLoaded', function() {
 
