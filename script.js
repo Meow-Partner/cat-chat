@@ -298,11 +298,12 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // 骰子
+    // 骰子 (修正为1-6)
     const dice = document.getElementById('diceBtn');
     if (dice && typeof addMessage === 'function') {
         dice.onclick = () => {
-            addMessage('🎲 我掷出了 ' + (Math.floor(Math.random() * 6) + 1) + ' 点', true);
+            const result = Math.floor(Math.random() * 6) + 1;
+            addMessage('🎲 我掷出了 ' + result + ' 点', true);
         };
     }
 
@@ -421,4 +422,22 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCardsFromGitHub(true);
     }, 2000);
 
+    // ========== 每分钟自动“拍了拍你”（模拟版）==========
+    let patCounter = 0;
+
+    function minutePat() {
+        patCounter++;
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        console.log(`[模拟拍拍] ${timeStr} 第 ${patCounter} 次：拍了拍你`);
+        
+        // TODO: 等打包成 APK 后，把上面那行 console.log 删掉，换成下面这行的真实通知
+        // 注意：使用真实通知时，需要在文件最顶部添加：import { LocalNotifications } from '@capacitor/local-notifications';
+        // await LocalNotifications.schedule({ notifications: [{ title: '⭐️ 拍了拍你', body: '', id: Date.now(), schedule: { at: new Date() }, sound: null }] });
+    }
+
+    // 立即执行一次
+    minutePat();
+    // 设置每分钟（60000毫秒）执行一次
+    setInterval(minutePat, 60000);
 });
