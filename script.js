@@ -1,4 +1,4 @@
-// ========== script.js · 最终手机优化版（输入框变发送） ==========
+// ========== script.js · 最终手机优化版（无语法错误） ==========
 document.addEventListener('DOMContentLoaded', function() {
     console.log('手机优化版已加载');
 
@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const diceBtn = document.getElementById('diceBtn');
     const emojiBtn = document.getElementById('openEmojiBtn');
     
-    // 更新按钮文字和样式
     function updateActionButton() {
         if (!msgInput || !actionBtn) return;
         const hasText = msgInput.value.trim().length > 0;
@@ -65,18 +64,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (msgInput && actionBtn) {
-        // 监听 input 事件（打字时）
         msgInput.addEventListener('input', updateActionButton);
-        // 监听 change 事件（输入完成）
         msgInput.addEventListener('change', updateActionButton);
-        // 监听 blur 事件（失去焦点）
         msgInput.addEventListener('blur', updateActionButton);
-        // 监听 keyup 事件（按键抬起）
         msgInput.addEventListener('keyup', updateActionButton);
         
-        // 按钮点击逻辑
         actionBtn.onclick = () => {
-            updateActionButton(); // 确保状态最新
+            updateActionButton();
             const hasText = msgInput.value.trim().length > 0;
             if (hasText) {
                 const text = msgInput.value.trim();
@@ -91,12 +85,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 fileInput.click();
             }
         };
-        
-        // 初始化
         updateActionButton();
     }
     
-    // 骰子
     if (diceBtn) {
         diceBtn.onclick = () => {
             const result = Math.floor(Math.random() * 6) + 1;
@@ -108,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // 表情按钮
     if (emojiBtn) {
         emojiBtn.onclick = () => {
             if (typeof showStickerModal === 'function') {
@@ -119,7 +109,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // 文件上传
     if (fileInput) {
         fileInput.onchange = (e) => {
             const files = e.target.files;
@@ -140,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // 加载字卡
     if (typeof loadAllData === 'function') {
         loadAllData();
     }
