@@ -1,6 +1,7 @@
-// ========== 主脚本入口（干净版）==========
+// ========== 导入 Capacitor 通知插件（打包 APK 时会生效）==========
+import { LocalNotifications } from '@capacitor/local-notifications';
 
-// 等待页面加载完成后再执行
+// ========== 主脚本入口 ==========
 document.addEventListener('DOMContentLoaded', function() {
 
     // 页面切换
@@ -422,22 +423,60 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCardsFromGitHub(true);
     }, 2000);
 
-    // ========== 每分钟自动“拍了拍你”（模拟版）==========
-    let patCounter = 0;
+    // ========== 每半小时随机一次“拍了拍你”（为弹窗做好准备）==========
 
-    function minutePat() {
-        patCounter++;
+    function getRandomTimeInNextHalfHour() {
         const now = new Date();
-        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        console.log(`[模拟拍拍] ${timeStr} 第 ${patCounter} 次：拍了拍你`);
-        
-        // TODO: 等打包成 APK 后，把上面那行 console.log 删掉，换成下面这行的真实通知
-        // 注意：使用真实通知时，需要在文件最顶部添加：import { LocalNotifications } from '@capacitor/local-notifications';
-        // await LocalNotifications.schedule({ notifications: [{ title: '⭐️ 拍了拍你', body: '', id: Date.now(), schedule: { at: new Date() }, sound: null }] });
+        const minutes = now.getMinutes();
+        let nextSlotStart = new Date(now);
+
+        if (minutes < 30) {
+            nextSlotStart.setMinutes(30, 0, 0);
+        } else {
+            nextSlotStart.setHours(now.getHours() + 1, 0, 0, 0);
+        }
+
+        const nextSlotEnd = new Date(nextSlotStart);
+        nextSlotEnd.setMinutes(nextSlotStart.getMinutes() + 30);
+
+        const randomTime = new Date(
+            nextSlotStart.getTime() +
+            Math.random() * (nextSlotEnd.getTime() - nextSlotStart.getTime())
+        );
+        return randomTime;
     }
 
-    // 立即执行一次
-    minutePat();
-    // 设置每分钟（60000毫秒）执行一次
-    setInterval(minutePat, 60000);
+    async function scheduleRandomPat() {
+        const triggerTime = getRandomTimeInNextHalfHour();
+        const timeStr = triggerTime.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+
+        console.log(`[模拟拍拍] 下次将在 ${timeStr} “拍了拍你”`);
+
+        const delayMs = triggerTime.getTime() - Date.now();
+
+        setTimeout(async () => {
+            // ✅ 真实弹窗代码（打包 APK 后生效）
+            await LocalNotifications.schedule({
+                notifications: [{
+                    title: '⭐️ 拍了拍你',
+                    body: '',
+                    id: Date.now(),
+                    schedule: { at: new Date() },
+                    sound: null
+                }]
+            });
+
+            console.log(`[模拟拍拍] ✅ 已发送真实通知`);
+
+            // 继续安排下一个半小时段
+            scheduleRandomPat();
+        }, delayMs);
+    }
+
+    // 启动循环
+    scheduleRandomPat();
 });
