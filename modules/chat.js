@@ -313,10 +313,14 @@ function renderEmojiStickers() {
     // 已移到底部操作栏，这里留空
 }
 
-// + 按钮打开文件夹
-document.getElementById('plusBtn').onclick = function() {
-    document.getElementById('fileInput').click();
-};
+// + 按钮打开文件夹（兼容 plusBtn 和 actionBtn）
+var plusButton = document.getElementById('plusBtn') || document.getElementById('actionBtn');
+if (plusButton) {
+    plusButton.onclick = function() {
+        var fileInput = document.getElementById('fileInput');
+        if (fileInput) fileInput.click();
+    };
+}
 
 document.getElementById('fileInput').onchange = function(e) {
     var files = e.target.files;
