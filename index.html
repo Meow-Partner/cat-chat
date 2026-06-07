@@ -6,16 +6,97 @@
     <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>CatChat</title>
-    <link rel="stylesheet" href="style.css">
+    <title>猫猫搭档 · 星回小窝</title>
     <link rel="manifest" href="manifest.json">
+    <style>
+        /* ========== 完整样式（内嵌，不依赖外部 CSS） ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: linear-gradient(135deg, #f8c9d4 0%, #d7b5e6 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .phone { width: 100%; max-width: 450px; height: 100vh; background: rgba(255,255,255,0.92); backdrop-filter: blur(2px); display: flex; flex-direction: column; box-shadow: 0 0 30px rgba(0,0,0,0.15); position: relative; overflow: hidden; }
+        
+        /* 顶部栏 */
+        .new-top-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; background: rgba(255,240,245,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.5); flex-shrink: 0; }
+        .top-left, .top-right { display: flex; align-items: center; gap: 8px; }
+        .top-center { flex: 1; text-align: center; }
+        .avatar-small { width: 32px; height: 32px; border-radius: 50%; background: #d98ab7; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; }
+        .name { font-size: 16px; font-weight: 500; color: #333; margin: 0 4px; }
+        .icon-btn { background: none; border: none; font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 20px; }
+        .bubble-btn { background: rgba(255,255,255,0.6); border: none; font-size: 28px; cursor: pointer; padding: 4px 12px; border-radius: 40px; transition: 0.2s; }
+        
+        /* 主内容区 */
+        .content-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: rgba(255,250,252,0.7); width: 100%; }
+        .page { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+        .page.active { display: flex; }
+        
+        /* 聊天区域 */
+        .chat-area { flex: 1; overflow-y: auto; padding: 16px 12px; display: flex; flex-direction: column; gap: 12px; background: rgba(255,245,250,0.4); }
+        
+        /* 底部栏 */
+        .bottom-bar { background: rgba(255,235,245,0.9); backdrop-filter: blur(8px); border-top: 1px solid rgba(255,255,255,0.6); padding: 10px 12px; flex-shrink: 0; }
+        .input-row { display: flex; gap: 8px; align-items: center; }
+        .input-row input { flex: 1; padding: 10px 14px; border: 1px solid #ffcfdf; border-radius: 40px; font-size: 15px; background: white; }
+        .dice-btn { background: #f5c6e0; border: none; font-size: 24px; padding: 8px 12px; border-radius: 40px; cursor: pointer; }
+        .action-btn { background: #e29bc2; border: none; color: white; padding: 10px 16px; border-radius: 40px; font-weight: 500; cursor: pointer; }
+        .action-btn.send-mode { background-color: #07c160; }
+        .action-btn.plus-mode { background-color: #e29bc2; font-size: 20px; padding: 8px 14px; }
+        .bottom-actions { display: flex; gap: 12px; margin-top: 8px; overflow-x: auto; padding-bottom: 4px; align-items: center; }
+        .file-input-hidden { display: none; }
+        
+        /* 消息气泡 */
+        .message-row { display: flex; width: 100%; margin-bottom: 8px; }
+        .message-row.me { justify-content: flex-end; }
+        .message-row.other { justify-content: flex-start; }
+        .msg-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,215,225,0.9); display: flex; align-items: center; justify-content: center; font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: 16px; color: #b35f8e; flex-shrink: 0; cursor: pointer; }
+        .message-row.me .msg-avatar { margin-left: 8px; }
+        .message-row.other .msg-avatar { margin-right: 8px; }
+        .msg-content { max-width: 70%; display: flex; flex-direction: column; }
+        .message-row.me .msg-content { align-items: flex-end; }
+        .message-row.other .msg-content { align-items: flex-start; }
+        .bubble { background: #ffffffdd; backdrop-filter: blur(4px); padding: 10px 14px; border-radius: 20px; word-wrap: break-word; cursor: pointer; }
+        .message-row.me .bubble { background: #ffe0f0dd; border-top-right-radius: 4px; }
+        .message-row.other .bubble { background: #ffffffdd; border-top-left-radius: 4px; }
+        .time { font-size: 10px; color: #bf8aa8; margin-top: 4px; text-align: right; }
+        
+        /* 设置页面 */
+        .scroll-page { flex: 1; overflow-y: auto; padding: 16px; }
+        .setting-row { margin-bottom: 12px; }
+        .setting-row label { display: inline-block; width: 140px; color: #a5557e; }
+        .setting-row input { padding: 6px; border-radius: 30px; border: 1px solid #ffbfd5; background: white; width: 120px; }
+        button { background: #f5d6e5; border: none; padding: 6px 14px; border-radius: 30px; font-size: 12px; cursor: pointer; color: #8a5472; }
+        .danger-btn { background: #ffe0e7; color: #d96c9e; }
+        hr { margin: 12px 0; border-color: #ffd4e4; }
+        .card-textarea { width: 100%; padding: 10px; border-radius: 20px; border: 1px solid #ffbfd5; font-size: 14px; resize: vertical; }
+        .reply-preview { background: #f9e6f0; border-radius: 20px; padding: 8px 12px; margin-top: 12px; font-size: 12px; color: #b35f8e; }
+        .card-input-area { background: #fff5fa; border-radius: 28px; padding: 12px; margin-bottom: 20px; }
+        .add-method-buttons { display: flex; gap: 12px; margin-top: 8px; justify-content: flex-end; flex-wrap: wrap; }
+        .card-group { margin-bottom: 20px; border: 1px solid #ffcfdf; border-radius: 28px; background: rgba(255,255,255,0.7); overflow: hidden; }
+        .group-header { display: flex; justify-content: space-between; align-items: center; padding: 14px; cursor: pointer; background: #fff0f5; }
+        .group-title { font-weight: 600; font-family: 'Times New Roman', Times, serif; color: #b15d88; display: flex; align-items: center; gap: 8px; }
+        .group-actions { display: flex; gap: 6px; align-items: center; }
+        .group-content { padding: 12px; border-top: 1px solid #ffcfdf; display: none; }
+        .group-content.expanded { display: block; }
+        .word-card { background: #fff0f5; margin: 8px 0; padding: 8px 12px; border-radius: 24px; }
+        
+        /* 休闲页面 */
+        .leisure-page { padding: 16px; overflow-y: auto; }
+        .leisure-category { background: rgba(255,255,255,0.7); border-radius: 28px; margin-bottom: 16px; overflow: hidden; border: 1px solid #ffcfdf; }
+        .category-header { display: flex; justify-content: space-between; align-items: center; padding: 14px; background: #fff0f5; cursor: pointer; }
+        .category-title { font-weight: 600; font-family: 'Times New Roman', Times, serif; color: #b15d88; }
+        .category-content { padding: 12px; border-top: 1px solid #ffcfdf; display: none; }
+        .category-content.expanded { display: block; }
+        .leisure-item-card { background: #fff0f5; margin: 8px 0; padding: 10px 12px; border-radius: 24px; }
+        .item-name { font-weight: 500; color: #8a5472; }
+        .progress-bar { background: #e0d0e0; border-radius: 20px; height: 8px; overflow: hidden; margin: 8px 0; }
+        .progress-fill { background: #d98ab7; height: 100%; width: 0%; border-radius: 20px; transition: width 0.3s; }
+        .item-actions { display: flex; gap: 8px; margin-top: 8px; justify-content: flex-end; }
+    </style>
 </head>
 <body>
 <div class="phone">
-    <!-- ========== 新顶部栏（左：沈星回｜中：🫧｜右：我 + 设置） ========== -->
-    <div class="top-bar new-top-bar">
+    <!-- 顶部栏 -->
+    <div class="new-top-bar">
         <div class="top-left">
-            <div class="avatar-small" id="partnerAvatar" style="background:#d98ab7; display:inline-flex; align-items:center; justify-content:center;">⭐</div>
+            <div class="avatar-small" id="partnerAvatar">⭐</div>
             <span class="name" id="partnerName">沈星回</span>
             <button class="icon-btn" id="starMenuBtn" title="字卡管理">📚</button>
         </div>
@@ -25,92 +106,83 @@
         <div class="top-right">
             <button class="icon-btn" id="settingsBtn" title="设置与更新">⚙️</button>
             <span class="name" id="myNickname">我</span>
-            <div class="avatar-small" id="myAvatar" style="background:#d98ab7; display:inline-flex; align-items:center; justify-content:center;">🐱</div>
+            <div class="avatar-small" id="myAvatar">🐱</div>
         </div>
     </div>
 
-    <div class="main-layout">
-        <!-- 侧边栏只保留聊天和设置入口 -->
-        <div class="sidebar-tabs" id="sidebarTabs">
-            <div class="side-tab active" data-page="chat-page">💬<br>聊天</div>
-            <div class="side-tab" data-page="manage-page">⚙️<br>设置</div>
+    <div class="content-panel">
+        <!-- 聊天页面 -->
+        <div id="chat-page" class="page active">
+            <div class="chat-area" id="chatArea"></div>
+            <div class="bottom-bar">
+                <div class="input-row">
+                    <button class="dice-btn" id="diceBtn">🎲</button>
+                    <input type="text" id="msgInput" placeholder="输入消息...">
+                    <button id="actionBtn" class="action-btn plus-mode">➕</button>
+                    <button id="sendMsgBtn" style="display: none;"></button>
+                </div>
+                <div class="bottom-actions">
+                    <button class="action-btn" id="openEmojiBtn">😊 通用表情</button>
+                    <button class="action-btn" id="openStickerBtn1">🐱 猫猫搭档1</button>
+                    <button class="action-btn" id="openStickerBtn2">🐱 猫猫搭档2</button>
+                    <input type="file" id="fileInput" class="file-input-hidden" multiple>
+                </div>
+            </div>
         </div>
-        <button class="toggle-sidebar-btn" id="toggleSidebarBtn" title="隐藏/展开菜单">◀</button>
 
-        <div class="content-panel">
-            <!-- 聊天页面 -->
-            <div id="chat-page" class="page active">
-                <div class="chat-area" id="chatArea"></div>
-                <div class="bottom-bar">
-                    <div class="input-row">
-                        <button class="dice-btn" id="diceBtn">🎲</button>
-                        <input type="text" id="msgInput" placeholder="输入消息...">
-                        <button id="actionBtn" class="action-btn plus-mode">➕</button>
-                        <button id="sendMsgBtn" style="display: none;"></button>
-                    </div>
-                    <div class="bottom-actions" id="bottomActions">
-                        <button class="action-btn" id="openEmojiBtn">😊 通用表情</button>
-                        <button class="action-btn" id="openStickerBtn1">🐱 猫猫搭档1</button>
-                        <button class="action-btn" id="openStickerBtn2">🐱 猫猫搭档2</button>
-                        <input type="file" id="fileInput" class="file-input-hidden" multiple accept="image/*,video/*,audio/*,application/*">
+        <!-- 休闲页面 -->
+        <div id="leisure-page" class="page">
+            <div class="leisure-page" id="leisureContainer"></div>
+        </div>
+
+        <!-- 设置页面 -->
+        <div id="manage-page" class="page">
+            <div class="scroll-page">
+                <h4>📚 字卡管理</h4>
+                <div id="groupsContainer"></div>
+                <button id="addGroupBtn">+ 新建分组</button>
+                <div class="card-input-area">
+                    <textarea id="cardBulkInput" class="card-textarea" rows="4" placeholder="每行一条回复内容"></textarea>
+                    <div class="add-method-buttons">
+                        <button id="updateCardsBtn">📥 从 GitHub 更新字卡</button>
+                        <button id="addMultiLineBtn">批量添加回复</button>
+                        <button id="clearTextareaBtn" class="danger-btn">清空内容</button>
                     </div>
                 </div>
-            </div>
-
-            <!-- 休闲小憩页面（点击顶部泡泡进入） -->
-            <div id="leisure-page" class="page">
-                <div class="leisure-page" id="leisureContainer"></div>
-            </div>
-
-            <!-- 设置页面（整合字卡管理 + 更新功能 + 未来表情管理） -->
-            <div id="manage-page" class="page">
-                <div class="scroll-page">
-                    <h4>📚 字卡管理</h4>
-                    <div id="groupsContainer"></div>
-                    <button id="addGroupBtn">+ 新建分组</button>
-                    <div class="card-input-area">
-                        <textarea id="cardBulkInput" class="card-textarea" rows="4" placeholder="每行一条回复内容"></textarea>
-                        <div class="add-method-buttons">
-                            <button id="updateCardsBtn">📥 从 GitHub 更新字卡</button>
-                            <button id="addMultiLineBtn">批量添加回复</button>
-                            <button id="clearTextareaBtn" class="danger-btn">清空内容</button>
-                        </div>
-                    </div>
-                    <hr>
-                    <h4>⚡ 沈星回回复设置</h4>
-                    <div class="setting-row"><label>回复最慢时长(秒):</label><input type="number" id="maxDelaySec" value="300"></div>
-                    <div class="setting-row"><label>回复最快时长(秒):</label><input type="number" id="minDelaySec" value="1"></div>
-                    <div class="setting-row"><label>主动发消息间隔(分钟):</label><input type="number" id="activeDelayMin" value="5"></div>
-                    <div class="reply-preview">📚 当前字卡库共有 <span id="totalReplyCount">0</span> 条回复</div>
-                    <button id="saveReplySettings">保存设置</button>
-                    <hr>
-                    <h4>👤 个人设置</h4>
-                    <div class="setting-row"><label>我的昵称:</label><input type="text" id="myNickname" placeholder="user"></div>
-                    <div class="setting-row"><label>我的头像文字:</label><input type="text" id="myAvatarText" placeholder="user" maxlength="6"></div>
-                    <div class="setting-row"><label>对方昵称:</label><input type="text" id="partnerNickname" placeholder="沈星回"></div>
-                    <div class="setting-row"><label>对方头像文字:</label><input type="text" id="partnerAvatarText" placeholder="Star" maxlength="6"></div>
-                    <button id="saveProfileBtn">💾 保存设置</button>
-                    <hr>
-                    <h4>📦 全部数据导入/导出</h4>
-                    <div style="margin: 12px 0; display: flex; gap: 10px; flex-wrap: wrap;">
-                        <input type="file" id="importFileInput" accept=".json,.txt">
-                        <button id="importDataBtn">导入数据</button>
-                        <button id="exportFullData">导出数据(.json)</button>
-                    </div>
-                    <hr>
-                    <h4>🗑️ 管理消息</h4>
-                    <button id="clearAllChats" class="danger-btn">清空全部聊天记录</button>
-                    <button id="updateGuideBtn" class="danger-btn" style="margin-top:12px;">📋 更新说明</button>
-                    <hr>
-                    <h4>😊 表情包管理（后续扩展）</h4>
-                    <div class="setting-row">通用表情 / 猫猫搭档1 / 猫猫搭档2 将在此处统一管理</div>
+                <hr>
+                <h4>⚡ 沈星回回复设置</h4>
+                <div class="setting-row"><label>回复最慢时长(秒):</label><input type="number" id="maxDelaySec" value="300"></div>
+                <div class="setting-row"><label>回复最快时长(秒):</label><input type="number" id="minDelaySec" value="1"></div>
+                <div class="setting-row"><label>主动发消息间隔(分钟):</label><input type="number" id="activeDelayMin" value="5"></div>
+                <div class="reply-preview">📚 当前字卡库共有 <span id="totalReplyCount">0</span> 条回复</div>
+                <button id="saveReplySettings">保存设置</button>
+                <hr>
+                <h4>👤 个人设置</h4>
+                <div class="setting-row"><label>我的昵称:</label><input type="text" id="myNickname" placeholder="user"></div>
+                <div class="setting-row"><label>我的头像文字:</label><input type="text" id="myAvatarText" placeholder="user" maxlength="6"></div>
+                <div class="setting-row"><label>对方昵称:</label><input type="text" id="partnerNickname" placeholder="沈星回"></div>
+                <div class="setting-row"><label>对方头像文字:</label><input type="text" id="partnerAvatarText" placeholder="Star" maxlength="6"></div>
+                <button id="saveProfileBtn">💾 保存设置</button>
+                <hr>
+                <h4>📦 全部数据导入/导出</h4>
+                <div style="margin: 12px 0; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="file" id="importFileInput" accept=".json,.txt">
+                    <button id="importDataBtn">导入数据</button>
+                    <button id="exportFullData">导出数据(.json)</button>
                 </div>
+                <hr>
+                <h4>🗑️ 管理消息</h4>
+                <button id="clearAllChats" class="danger-btn">清空全部聊天记录</button>
+                <button id="updateGuideBtn" class="danger-btn" style="margin-top:12px;">📋 更新说明</button>
+                <hr>
+                <h4>😊 表情包管理（后续扩展）</h4>
+                <div class="setting-row">通用表情 / 猫猫搭档1 / 猫猫搭档2 将在此处统一管理</div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 确保 chat.js 运行所需的基础容器和隐藏按钮存在 -->
+<!-- 隐藏元素 -->
 <div id="chatArea" class="chat-area" style="display: none;"></div>
 <button id="sendMsgBtn" style="display: none;"></button>
 
