@@ -6,68 +6,75 @@
     <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>猫猫搭档的聊天室</title>
+    <title>猫猫搭档 · 星回小窝</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
 <div class="phone">
-    <div class="top-bar">
-        <div class="partner-info">
-            <div class="partner-name">
-                <span id="partnerName">沈星回</span>
-                <button class="edit-name" id="editNameBtn">✎</button>
-            </div>
-            <div class="partner-status" id="partnerStatus">
-                <span id="onlineStatus">在线</span>
-                <span id="leisureStatus"></span>
-            </div>
-            <div class="typing-status" id="typingStatus"></div>
+    <!-- ========== 新顶部栏（左：沈星回｜中：🫧｜右：我 + 设置） ========== -->
+    <div class="top-bar new-top-bar">
+        <div class="top-left">
+            <img src="star_avatar.png" alt="沈星回" class="avatar-small" id="partnerAvatar">
+            <span class="name" id="partnerName">沈星回</span>
+            <button class="icon-btn" id="starMenuBtn" title="字卡管理">📚</button>
+        </div>
+        <div class="top-center">
+            <button class="bubble-btn" id="leisureBubbleBtn">🫧</button>
+        </div>
+        <div class="top-right">
+            <button class="icon-btn" id="settingsBtn" title="设置与更新">⚙️</button>
+            <span class="name" id="myNickname">我</span>
+            <img src="user_avatar.png" alt="我" class="avatar-small" id="myAvatar">
         </div>
     </div>
 
     <div class="main-layout">
+        <!-- 侧边栏只保留聊天入口 -->
         <div class="sidebar-tabs" id="sidebarTabs">
             <div class="side-tab active" data-page="chat-page">💬<br>聊天</div>
-            <div class="side-tab" data-page="card-page">📚<br>字卡</div>
-            <div class="side-tab" data-page="leisure-page">🎯<br>休闲</div>
             <div class="side-tab" data-page="manage-page">⚙️<br>设置</div>
-            <div class="side-tab update-tab" data-page="update-page">📋<br>更新</div>
         </div>
         <button class="toggle-sidebar-btn" id="toggleSidebarBtn" title="隐藏/展开菜单">◀</button>
 
         <div class="content-panel">
+            <!-- 聊天页面 -->
             <div id="chat-page" class="page active">
                 <div class="chat-area" id="chatArea"></div>
                 <div class="bottom-bar">
                     <div class="input-row">
                         <button class="dice-btn" id="diceBtn">🎲</button>
                         <input type="text" id="msgInput" placeholder="输入消息...">
-                        <button id="sendMsgBtn">发送</button>
+                        <button id="actionBtn" class="action-btn plus-mode">➕</button>
                     </div>
                     <div class="bottom-actions" id="bottomActions">
                         <button class="action-btn" id="openEmojiBtn">😊 通用表情</button>
                         <button class="action-btn" id="openStickerBtn1">🐱 猫猫搭档1</button>
                         <button class="action-btn" id="openStickerBtn2">🐱 猫猫搭档2</button>
-                        <button class="plus-btn" id="plusBtn">+</button>
                         <input type="file" id="fileInput" class="file-input-hidden" multiple accept="image/*,video/*,audio/*,application/*">
                     </div>
                 </div>
             </div>
 
-            <div id="card-page" class="page">
+            <!-- 休闲小憩页面（点击顶部泡泡进入） -->
+            <div id="leisure-page" class="page">
+                <div class="leisure-page" id="leisureContainer"></div>
+            </div>
+
+            <!-- 设置页面（整合字卡管理 + 更新功能 + 未来表情管理） -->
+            <div id="manage-page" class="page">
                 <div class="scroll-page">
+                    <h4>📚 字卡管理</h4>
                     <div id="groupsContainer"></div>
-                    <hr>
+                    <button id="addGroupBtn">+ 新建分组</button>
                     <div class="card-input-area">
-                        <textarea id="cardBulkInput" class="card-textarea" rows="5" placeholder="每行一条回复内容"></textarea>
+                        <textarea id="cardBulkInput" class="card-textarea" rows="4" placeholder="每行一条回复内容"></textarea>
                         <div class="add-method-buttons">
                             <button id="updateCardsBtn">📥 从 GitHub 更新字卡</button>
-                            <button id="addMultiLineBtn">🌸 批量添加回复</button>
-                            <button id="clearTextareaBtn" class="danger-btn">🗑️ 清空全部内容</button>
+                            <button id="addMultiLineBtn">批量添加回复</button>
+                            <button id="clearTextareaBtn" class="danger-btn">清空内容</button>
                         </div>
                     </div>
-                    <button id="addGroupBtn">+ 新建分组</button>
                     <hr>
                     <h4>⚡ 沈星回回复设置</h4>
                     <div class="setting-row"><label>回复最慢时长(秒):</label><input type="number" id="maxDelaySec" value="300"></div>
@@ -75,15 +82,7 @@
                     <div class="setting-row"><label>主动发消息间隔(分钟):</label><input type="number" id="activeDelayMin" value="5"></div>
                     <div class="reply-preview">📚 当前字卡库共有 <span id="totalReplyCount">0</span> 条回复</div>
                     <button id="saveReplySettings">保存设置</button>
-                </div>
-            </div>
-
-            <div id="leisure-page" class="page">
-                <div class="leisure-page" id="leisureContainer"></div>
-            </div>
-
-            <div id="manage-page" class="page">
-                <div class="scroll-page">
+                    <hr>
                     <h4>👤 个人设置</h4>
                     <div class="setting-row"><label>我的昵称:</label><input type="text" id="myNickname" placeholder="user"></div>
                     <div class="setting-row"><label>我的头像文字:</label><input type="text" id="myAvatarText" placeholder="user" maxlength="6"></div>
@@ -101,19 +100,9 @@
                     <h4>🗑️ 管理消息</h4>
                     <button id="clearAllChats" class="danger-btn">清空全部聊天记录</button>
                     <button id="updateGuideBtn" class="danger-btn" style="margin-top:12px;">📋 更新说明</button>
-                </div>
-            </div>
-
-            <div id="update-page" class="page">
-                <div class="scroll-page">
-                    <h3>📋 网站设计说明文档</h3>
-                    <div class="update-time">📅 最后更新：2026年1月19日</div>
-                    <div class="update-content">
-                        <p><strong>猫猫搭档的聊天室</strong> - 私人梦幻聊天网页</p>
-                        <h4>🎯 休闲板块</h4>
-                        <p>沈星回会随机进行休闲活动，显示在状态栏</p>
-                        <p>点击状态栏可选择操作</p>
-                    </div>
+                    <hr>
+                    <h4>😊 表情包管理（后续扩展）</h4>
+                    <div class="setting-row">通用表情 / 猫猫搭档1 / 猫猫搭档2 将在此处统一管理</div>
                 </div>
             </div>
         </div>
