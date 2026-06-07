@@ -6,7 +6,7 @@
     <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>CatChat</title>
+    <title>猫猫搭档 · 星回小窝</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
@@ -15,7 +15,7 @@
     <!-- ========== 新顶部栏（左：沈星回｜中：🫧｜右：我 + 设置） ========== -->
     <div class="top-bar new-top-bar">
         <div class="top-left">
-            <img src="star_avatar.png" alt="沈星回" class="avatar-small" id="partnerAvatar">
+            <div class="avatar-small" id="partnerAvatar" style="background:#d98ab7; display:inline-flex; align-items:center; justify-content:center;">⭐</div>
             <span class="name" id="partnerName">沈星回</span>
             <button class="icon-btn" id="starMenuBtn" title="字卡管理">📚</button>
         </div>
@@ -25,12 +25,12 @@
         <div class="top-right">
             <button class="icon-btn" id="settingsBtn" title="设置与更新">⚙️</button>
             <span class="name" id="myNickname">我</span>
-            <img src="user_avatar.png" alt="我" class="avatar-small" id="myAvatar">
+            <div class="avatar-small" id="myAvatar" style="background:#d98ab7; display:inline-flex; align-items:center; justify-content:center;">🐱</div>
         </div>
     </div>
 
     <div class="main-layout">
-        <!-- 侧边栏只保留聊天入口 -->
+        <!-- 侧边栏只保留聊天和设置入口 -->
         <div class="sidebar-tabs" id="sidebarTabs">
             <div class="side-tab active" data-page="chat-page">💬<br>聊天</div>
             <div class="side-tab" data-page="manage-page">⚙️<br>设置</div>
@@ -46,6 +46,7 @@
                         <button class="dice-btn" id="diceBtn">🎲</button>
                         <input type="text" id="msgInput" placeholder="输入消息...">
                         <button id="actionBtn" class="action-btn plus-mode">➕</button>
+                        <button id="sendMsgBtn" style="display: none;"></button>
                     </div>
                     <div class="bottom-actions" id="bottomActions">
                         <button class="action-btn" id="openEmojiBtn">😊 通用表情</button>
