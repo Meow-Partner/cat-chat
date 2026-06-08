@@ -1,4 +1,4 @@
-// ========== script.js · 2026-06-09 最终版 ==========
+// ========== script.js · 2026-06-09 最终完整版 ==========
 window.CatChat = window.CatChat || {};
 
 // 页面切换函数
@@ -28,7 +28,7 @@ window.CatChat.showMySpace = function() {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    // 获取按钮元素
+    // 获取元素
     const starSpaceBtn = document.getElementById('starSpaceBtn');
     const mySpaceBtn = document.getElementById('mySpaceBtn');
     const leisureBubbleBtn = document.getElementById('leisureBubbleBtn');
@@ -42,11 +42,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const bottomBar = document.querySelector('.bottom-bar');
     const chatArea = document.querySelector('.chat-area');
     
-    // 绑定头像切换
+    // ========== 头像单击切换（原功能） ==========
     if(starSpaceBtn) starSpaceBtn.onclick = window.CatChat.showHisSpace;
     if(mySpaceBtn) mySpaceBtn.onclick = window.CatChat.showMySpace;
     
-    // 泡泡：单击回聊天，双击进休闲
+    // ========== 泡泡：单击回聊天，双击进休闲 ==========
     if(leisureBubbleBtn) {
         let clickTimer = null;
         leisureBubbleBtn.onclick = function() {
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // 底部输入栏
+    // ========== 底部输入栏 ==========
     function updateActionButton() {
         if(!msgInput || !actionBtn) return;
         const hasText = msgInput.value.trim().length > 0;
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // 通用表情面板
+    // ========== 通用表情面板 ==========
     if(emojiBtn && bottomBar && chatArea) {
         emojiBtn.onclick = () => {
             let panel = document.getElementById('emojiPushPanel');
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // 聊天语录面板
+    // ========== 聊天语录面板 ==========
     if(stickerBtn && bottomBar && chatArea) {
         stickerBtn.innerText = '💬 聊天语录';
         if(stickerBtn2) stickerBtn2.style.display = 'none';
@@ -230,7 +230,6 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.style.display = 'flex';
     }
     
-    // 沈星回头像双击
     if (starSpaceBtn) {
         let starTimer = null;
         starSpaceBtn.onclick = function(e) {
@@ -241,14 +240,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.stopPropagation();
             } else {
                 starTimer = setTimeout(() => {
-                    if (window.CatChat?.showHisSpace) window.CatChat.showHisSpace();
+                    window.CatChat.showHisSpace();
                     starTimer = null;
                 }, 200);
             }
         };
     }
     
-    // 我的头像双击
     if (mySpaceBtn) {
         let myTimer = null;
         mySpaceBtn.onclick = function(e) {
@@ -259,18 +257,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.stopPropagation();
             } else {
                 myTimer = setTimeout(() => {
-                    if (window.CatChat?.showMySpace) window.CatChat.showMySpace();
+                    window.CatChat.showMySpace();
                     myTimer = null;
                 }, 200);
             }
         };
     }
     
-    // ========== 顶部栏双击切换模式 ==========
+    // ========== 顶部栏长按/双击切换模式（仅空白区域生效） ==========
     const topBar = document.querySelector('.new-top-bar');
     if (topBar) {
         const originalHTML = topBar.innerHTML;
         let isSimpleMode = localStorage.getItem('topBarSimpleMode') !== 'false';
+        let inactivityTimer = null;
+        
+        function resetInactivityTimer() {
+            if (inactivityTimer) clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                if (!isSimpleMode) {
+                    isSimpleMode = true;
+                    localStorage.setItem('topBarSimpleMode', 'true');
+                    updateTopBarMode();
+                }
+            }, 5000);
+        }
         
         function updateTopBarMode() {
             if (isSimpleMode) {
@@ -289,17 +299,78 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 topBar.innerHTML = originalHTML;
             }
+            resetInactivityTimer();
         }
         
-        topBar.ondblclick = function() {
-            isSimpleMode = !isSimpleMode;
-            localStorage.setItem('topBarSimpleMode', isSimpleMode);
-            updateTopBarMode();
-        };
+        // 监听用户操作重置计时器
+        function onUserAction() { resetInactivityTimer(); }
+        document.addEventListener('click', onUserAction);
+        document.addEventListener('keydown', onUserAction);
+        if (msgInput) msgInput.addEventListener('input', onUserAction);
+        
+        // 长按（仅空白区域）
+        let pressTimer = null;
+        topBar.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.bubble-btn, .icon-btn, .avatar-small, .name')) return;
+            pressTimer = setTimeout(() => {
+                isSimpleMode = true;
+                localStorage.setItem('topBarSimpleMode', 'true');
+                updateTopBarMode();
+                pressTimer = null;
+            }, 500);
+        });
+        topBar.addEventListener('mouseup', () => clearTimeout(pressTimer));
+        topBar.addEventListener('mouseleave', () => clearTimeout(pressTimer));
+        
+        // 双击（仅空白区域）
+        let clickTimer = null;
+        topBar.addEventListener('click', (e) => {
+            if (e.target.closest('.bubble-btn, .icon-btn, .avatar-small, .name')) return;
+            if (clickTimer) {
+                clearTimeout(clickTimer);
+                clickTimer = null;
+                isSimpleMode = false;
+                localStorage.setItem('topBarSimpleMode', 'false');
+                updateTopBarMode();
+            } else {
+                clickTimer = setTimeout(() => {
+                    clickTimer = null;
+                }, 200);
+            }
+        });
+        
         updateTopBarMode();
+    }
+    
+    // ========== 对方自动回复（永久集成） ==========
+    if (window.CatChat.chat) {
+        const originalAdd = window.CatChat.chat.addMessage;
+        window.CatChat.chat.addMessage = function(text, isMe, imgSrc, options) {
+            originalAdd.call(this, text, isMe, imgSrc, options);
+            
+            if (isMe && text && text.trim()) {
+                // 显示正在输入中
+                const chatAreaEl = document.querySelector('.chat-area');
+                if (chatAreaEl) {
+                    const typingDiv = document.createElement('div');
+                    typingDiv.className = 'typing-indicator';
+                    typingDiv.innerText = '对方正在输入中...';
+                    typingDiv.style.cssText = 'color:#999; font-size:12px; padding:4px 12px; margin-bottom:4px;';
+                    chatAreaEl.appendChild(typingDiv);
+                    chatAreaEl.scrollTop = chatAreaEl.scrollHeight;
+                    
+                    setTimeout(() => {
+                        typingDiv.remove();
+                        const replies = ['嗯', '好的', '哈哈', '然后呢？', '真的吗？', '继续', '😊', '我也觉得'];
+                        const randomReply = replies[Math.floor(Math.random() * replies.length)];
+                        originalAdd.call(this, randomReply, false);
+                    }, 1000 + Math.random() * 1000);
+                }
+            }
+        };
     }
     
     if(typeof loadAllData === 'function') loadAllData();
     window.CatChat.showChatPage();
-    console.log('✅ script.js 已加载');
+    console.log('✅ 完整版 script.js 已加载');
 });
