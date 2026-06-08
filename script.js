@@ -1,4 +1,4 @@
-// ========== script.js · 修复版 ==========
+// ========== script.js · 完全修复版 ==========
 // import { LocalNotifications } from '@capacitor/local-notifications';
 
 const LocalNotifications = {
@@ -7,7 +7,6 @@ const LocalNotifications = {
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    // 页面切换
     const chatPage = document.getElementById('chat-page');
     const leisurePage = document.getElementById('leisure-page');
     const managePage = document.getElementById('manage-page');
@@ -30,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (managePage) managePage.classList.add('active');
     }
     
-    // 顶部栏按钮
     const starMenuBtn = document.getElementById('starMenuBtn');
     const settingsBtn = document.getElementById('settingsBtn');
     const leisureBubbleBtn = document.getElementById('leisureBubbleBtn');
@@ -39,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (settingsBtn) settingsBtn.onclick = showManagePage;
     if (leisureBubbleBtn) leisureBubbleBtn.onclick = showLeisurePage;
     
-    // 底部输入栏
     const msgInput = document.getElementById('msgInput');
     const actionBtn = document.getElementById('actionBtn');
     const fileInput = document.getElementById('fileInput');
@@ -120,5 +117,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     showChatPage();
-    console.log('✅ 修复版已加载');
+    console.log('✅ 完全修复版已加载');
 });
