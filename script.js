@@ -354,5 +354,39 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         initLocalDefaultCards();
     }, 500);
+
+        // 表情面板
+    const emojiBtn = document.getElementById('openEmojiBtn');
+    if (emojiBtn) {
+        emojiBtn.onclick = () => {
+            const emojis = ['😊', '😂', '😍', '😭', '😡', '🥺', '👍', '❤️', '🎉', '✨', '🌟', '💕', '😘', '😎', '🤔', '🙏', '💪', '🐱', '🌸', '🍃'];
+            let panel = document.getElementById('emojiPanel');
+            if (!panel) {
+                panel = document.createElement('div');
+                panel.id = 'emojiPanel';
+                panel.innerHTML = `<div style="background:white;position:fixed;bottom:0;left:0;right:0;border-radius:20px 20px 0 0;padding:12px;z-index:1000;transform:translateY(100%);transition:transform 0.3s">
+                    <div style="text-align:center;padding:10px;font-weight:bold">选择表情</div>
+                    <div id="emojiGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:10px;padding:12px;max-height:300px;overflow-y:auto"></div>
+                    <div style="text-align:center;padding:10px;color:#999;cursor:pointer" id="closeEmojiPanel">关闭</div>
+                </div>`;
+                document.body.appendChild(panel);
+                document.getElementById('closeEmojiPanel').onclick = () => { panel.style.transform = 'translateY(100%)'; };
+            }
+            const grid = document.getElementById('emojiGrid');
+            grid.innerHTML = '';
+            emojis.forEach(emoji => {
+                const item = document.createElement('div');
+                item.textContent = emoji;
+                item.style.cssText = 'font-size:32px;text-align:center;cursor:pointer;padding:8px';
+                item.onclick = () => {
+                    if (window.CatChat.chat && window.CatChat.chat.addMessage) window.CatChat.chat.addMessage(emoji, true);
+                    panel.style.transform = 'translateY(100%)';
+                };
+                grid.appendChild(item);
+            });
+            panel.style.transform = 'translateY(0)';
+        };
+    }
+    
     console.log('✅ script.js 已加载');
 });
