@@ -45,6 +45,31 @@
             const bubble = document.createElement('div');
             bubble.className = 'bubble';
             
+            // 新增：如果是自己发的短消息（≤4字），应用卡片样式
+            if (msg.isMe && msg.text && msg.text.length <= 4) {
+                bubble.classList.add('emoji-card');
+                const len = msg.text.length;
+                if (len === 1) bubble.style.fontSize = '32px';
+                else if (len === 2) bubble.style.fontSize = '28px';
+                else if (len === 3) bubble.style.fontSize = '24px';
+                else bubble.style.fontSize = '20px';
+            }
+            
+            bubble.innerHTML = '<div>' + escapeHtml(msg.text) + '</div>';
+            if (msg.imgSrc) bubble.innerHTML += '<img src="' + msg.imgSrc + '" style="max-width:150px;border-radius:12px;margin-top:6px;">';
+            contentDiv.appendChild(bubble);
+            if (msg.isMe) {
+                row.appendChild(contentDiv);
+                row.appendChild(avatar);
+            } else {
+                row.appendChild(avatar);
+                row.appendChild(contentDiv);
+            }
+            chatContainer.appendChild(row);
+        }
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+            
             // 如果是自己发的短消息（≤4字），应用卡片样式
             if (msg.isMe && msg.text && msg.text.length <= 4) {
                 bubble.classList.add('emoji-card');
