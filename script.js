@@ -1,7 +1,6 @@
 // ========== script.js · 2026-06-09 最终完整版 ==========
 window.CatChat = window.CatChat || {};
 
-// 页面切换函数
 window.CatChat.showChatPage = function() {
     const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
     pages.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
@@ -28,7 +27,6 @@ window.CatChat.showMySpace = function() {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    // 获取元素
     const starSpaceBtn = document.getElementById('starSpaceBtn');
     const mySpaceBtn = document.getElementById('mySpaceBtn');
     const leisureBubbleBtn = document.getElementById('leisureBubbleBtn');
@@ -42,11 +40,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const bottomBar = document.querySelector('.bottom-bar');
     const chatArea = document.querySelector('.chat-area');
     
-    // ========== 头像单击切换（原功能） ==========
     if(starSpaceBtn) starSpaceBtn.onclick = window.CatChat.showHisSpace;
     if(mySpaceBtn) mySpaceBtn.onclick = window.CatChat.showMySpace;
     
-    // ========== 泡泡：单击回聊天，双击进休闲 ==========
     if(leisureBubbleBtn) {
         let clickTimer = null;
         leisureBubbleBtn.onclick = function() {
@@ -63,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // ========== 底部输入栏 ==========
     function updateActionButton() {
         if(!msgInput || !actionBtn) return;
         const hasText = msgInput.value.trim().length > 0;
@@ -264,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // ========== 顶部栏长按/双击切换模式（仅空白区域生效） ==========
+    // ========== 顶部栏长按/双击切换模式 ==========
     const topBar = document.querySelector('.new-top-bar');
     if (topBar) {
         const originalHTML = topBar.innerHTML;
@@ -302,13 +297,11 @@ document.addEventListener('DOMContentLoaded', function() {
             resetInactivityTimer();
         }
         
-        // 监听用户操作重置计时器
         function onUserAction() { resetInactivityTimer(); }
         document.addEventListener('click', onUserAction);
         document.addEventListener('keydown', onUserAction);
         if (msgInput) msgInput.addEventListener('input', onUserAction);
         
-        // 长按（仅空白区域）
         let pressTimer = null;
         topBar.addEventListener('mousedown', (e) => {
             if (e.target.closest('.bubble-btn, .icon-btn, .avatar-small, .name')) return;
@@ -322,7 +315,6 @@ document.addEventListener('DOMContentLoaded', function() {
         topBar.addEventListener('mouseup', () => clearTimeout(pressTimer));
         topBar.addEventListener('mouseleave', () => clearTimeout(pressTimer));
         
-        // 双击（仅空白区域）
         let clickTimer = null;
         topBar.addEventListener('click', (e) => {
             if (e.target.closest('.bubble-btn, .icon-btn, .avatar-small, .name')) return;
@@ -349,7 +341,6 @@ document.addEventListener('DOMContentLoaded', function() {
             originalAdd.call(this, text, isMe, imgSrc, options);
             
             if (isMe && text && text.trim()) {
-                // 显示正在输入中
                 const chatAreaEl = document.querySelector('.chat-area');
                 if (chatAreaEl) {
                     const typingDiv = document.createElement('div');
@@ -372,5 +363,5 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if(typeof loadAllData === 'function') loadAllData();
     window.CatChat.showChatPage();
-    console.log('✅ 完整版 script.js 已加载');
+    console.log('✅ script.js 已加载');
 });
