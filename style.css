@@ -450,3 +450,25 @@ hr {
     -webkit-user-select: none;
     -ms-user-select: none;
 }
+
+/* ========== 弹窗样式 ========== */
+#detailOverlay {
+    backdrop-filter: blur(4px);
+}
+
+/* ========== 顶部栏过渡动画 ========== */
+.new-top-bar {
+    transition: all 0.2s ease;
+}
+
+/* ========== 简单模式下状态文字 ========== */
+#simpleModeStatus {
+    transition: opacity 0.2s ease;
+}
+
+/* ========== 禁止选中顶部栏文字 ========== */
+.top-left, .top-right, .avatar-small, .name, .new-top-bar span {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
