@@ -525,3 +525,60 @@ hr {
 .invite-btn {
     background: #07c160;
 }
+/* ========== 2026-06-08 21:00:00 添加 ========== */
+.top-left, .top-right, #starSpaceBtn, #mySpaceBtn, .avatar-small, .name, .bubble-btn {
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+.top-left:active, .top-right:active, #starSpaceBtn:active, #mySpaceBtn:active,
+.avatar-small:active, .name:active, .bubble-btn:active {
+    transform: scale(0.95);
+}
+
+/* 字卡管理样式 */
+.card-group {
+    margin-bottom: 15px;
+    border: 1px solid #ffcfdf;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #f8e0ec;
+    cursor: pointer;
+}
+.group-content {
+    padding: 10px;
+    border-top: 1px solid #ffcfdf;
+}
+.word-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    margin: 5px 0;
+    background: #fff0f5;
+    border-radius: 8px;
+}
+.delete-card-btn {
+    background: #ffe0e7;
+    color: #d96c9e;
+    border: none;
+    padding: 2px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+.add-card-area {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+}
+.new-card-input {
+    flex: 1;
+    padding: 6px;
+    border-radius: 20px;
+    border: 1px solid #ffcfdf;
+}
