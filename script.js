@@ -355,9 +355,8 @@ document.addEventListener('DOMContentLoaded', function() {
         initLocalDefaultCards();
     }, 500);
 
-        // 表情面板
-    const emojiBtn = document.getElementById('openEmojiBtn');
-    if (emojiBtn) {
+    // 表情面板（使用已有的 emojiBtn，不重复声明）
+    if (typeof emojiBtn !== 'undefined' && emojiBtn) {
         emojiBtn.onclick = () => {
             const emojis = ['😊', '😂', '😍', '😭', '😡', '🥺', '👍', '❤️', '🎉', '✨', '🌟', '💕', '😘', '😎', '🤔', '🙏', '💪', '🐱', '🌸', '🍃'];
             let panel = document.getElementById('emojiPanel');
