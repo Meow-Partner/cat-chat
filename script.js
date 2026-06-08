@@ -1,14 +1,12 @@
-// ========== script.js · 2026-06-08 15:45:00 ==========
-// 初始化命名空间
+// ========== script.js · 2026-06-08 17:30:00 ==========
 window.CatChat = window.CatChat || {};
 
-// 挂载页面切换函数到命名空间（供其他模块使用）
+// 页面切换函数
 window.CatChat.showChatPage = function() {
     const chatPage = document.getElementById('chat-page');
     const leisurePage = document.getElementById('leisure-page');
     const hisSpacePage = document.getElementById('his-space-page');
     const mySpacePage = document.getElementById('my-space-page');
-    
     if (chatPage) chatPage.classList.add('active');
     if (leisurePage) leisurePage.classList.remove('active');
     if (hisSpacePage) hisSpacePage.classList.remove('active');
@@ -21,7 +19,6 @@ window.CatChat.showLeisurePage = function() {
     const leisurePage = document.getElementById('leisure-page');
     const hisSpacePage = document.getElementById('his-space-page');
     const mySpacePage = document.getElementById('my-space-page');
-    
     if (chatPage) chatPage.classList.remove('active');
     if (leisurePage) leisurePage.classList.add('active');
     if (hisSpacePage) hisSpacePage.classList.remove('active');
@@ -34,7 +31,6 @@ window.CatChat.showHisSpace = function() {
     const leisurePage = document.getElementById('leisure-page');
     const hisSpacePage = document.getElementById('his-space-page');
     const mySpacePage = document.getElementById('my-space-page');
-    
     if (chatPage) chatPage.classList.remove('active');
     if (leisurePage) leisurePage.classList.remove('active');
     if (hisSpacePage) hisSpacePage.classList.add('active');
@@ -47,7 +43,6 @@ window.CatChat.showMySpace = function() {
     const leisurePage = document.getElementById('leisure-page');
     const hisSpacePage = document.getElementById('his-space-page');
     const mySpacePage = document.getElementById('my-space-page');
-    
     if (chatPage) chatPage.classList.remove('active');
     if (leisurePage) leisurePage.classList.remove('active');
     if (hisSpacePage) hisSpacePage.classList.remove('active');
@@ -56,15 +51,30 @@ window.CatChat.showMySpace = function() {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-
-    // 顶部栏按钮绑定（使用命名空间中的函数）
+    // 顶部栏按钮
     const starSpaceBtn = document.getElementById('starSpaceBtn');
     const mySpaceBtn = document.getElementById('mySpaceBtn');
     const leisureBubbleBtn = document.getElementById('leisureBubbleBtn');
     
     if (starSpaceBtn) starSpaceBtn.onclick = window.CatChat.showHisSpace;
     if (mySpaceBtn) mySpaceBtn.onclick = window.CatChat.showMySpace;
-    if (leisureBubbleBtn) leisureBubbleBtn.onclick = window.CatChat.showLeisurePage;
+    
+    // 泡泡：单击聊天，双击休闲
+    if (leisureBubbleBtn) {
+        let clickTimer = null;
+        leisureBubbleBtn.onclick = function() {
+            if (clickTimer) {
+                clearTimeout(clickTimer);
+                clickTimer = null;
+                window.CatChat.showLeisurePage();
+            } else {
+                clickTimer = setTimeout(function() {
+                    window.CatChat.showChatPage();
+                    clickTimer = null;
+                }, 200);
+            }
+        };
+    }
     
     // 底部输入栏逻辑
     const msgInput = document.getElementById('msgInput');
@@ -149,16 +159,46 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // 示例按钮（全部 alert）
-    const demoBtns = document.querySelectorAll('.demo-btn');
-    demoBtns.forEach(btn => {
-        btn.onclick = () => {
-            alert(`功能开发中：${btn.textContent}`);
-        };
-    });
+    // 绑定原有功能按钮（他的空间）
+    const addGroupBtn = document.getElementById('addGroupBtn');
+    const updateCardsBtn = document.getElementById('updateCardsBtn');
+    const addMultiLineBtn = document.getElementById('addMultiLineBtn');
+    const clearTextareaBtn = document.getElementById('clearTextareaBtn');
+    const saveReplySettings = document.getElementById('saveReplySettings');
     
-    // 默认显示聊天页
+    if (addGroupBtn && window.CatChat.card) addGroupBtn.onclick = () => window.CatChat.card.addGroup();
+    if (updateCardsBtn) updateCardsBtn.onclick = () => alert('从 GitHub 更新字卡功能开发中');
+    if (addMultiLineBtn) addMultiLineBtn.onclick = () => alert('批量添加功能开发中');
+    if (clearTextareaBtn) clearTextareaBtn.onclick = () => {
+        const ta = document.getElementById('cardBulkInput');
+        if (ta) ta.value = '';
+        alert('已清空');
+    };
+    if (saveReplySettings) saveReplySettings.onclick = () => alert('保存设置功能开发中');
+    
+    // 绑定原有功能按钮（我的空间）
+    const saveProfileBtn = document.getElementById('saveProfileBtn');
+    const importDataBtn = document.getElementById('importDataBtn');
+    const exportDataBtn = document.getElementById('exportFullData');
+    const clearChatsBtn = document.getElementById('clearAllChats');
+    const resetAllBtn = document.getElementById('resetAllData');
+    
+    if (saveProfileBtn) saveProfileBtn.onclick = () => alert('保存设置功能开发中');
+    if (importDataBtn) importDataBtn.onclick = () => alert('导入数据功能开发中');
+    if (exportDataBtn) exportDataBtn.onclick = () => alert('导出数据功能开发中');
+    if (clearChatsBtn) clearChatsBtn.onclick = () => {
+        if (confirm('清空所有聊天记录？')) {
+            if (window.CatChat.chat) window.CatChat.chat.clearMessages();
+            alert('聊天记录已清空');
+        }
+    };
+    if (resetAllBtn) resetAllBtn.onclick = () => {
+        if (confirm('恢复出厂设置？所有数据将丢失！')) {
+            localStorage.clear();
+            location.reload();
+        }
+    };
+    
     window.CatChat.showChatPage();
-    
-    console.log('✅ script.js 已加载，所有功能已绑定');
+    console.log('✅ script.js 已加载');
 });
