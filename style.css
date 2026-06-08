@@ -1,4 +1,4 @@
-/* ========== style.css · 第一阶段修复版 ========== */
+/* ========== style.css · 2026-06-09 01:30:00 ========== */
 * {
     margin: 0;
     padding: 0;
@@ -13,7 +13,6 @@ body {
     align-items: center;
     min-height: 100vh;
 }
-
 .phone {
     width: 100%;
     max-width: 450px;
@@ -27,7 +26,7 @@ body {
     overflow: hidden;
 }
 
-/* 顶部栏 */
+/* ========== 顶部栏 ========== */
 .new-top-bar {
     display: flex;
     justify-content: space-between;
@@ -42,6 +41,7 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    cursor: pointer;
 }
 .top-center {
     flex: 1;
@@ -63,60 +63,103 @@ body {
     color: #333;
     margin: 0 4px;
 }
-.icon-btn {
+.icon-btn, .bubble-btn {
     background: none;
     border: none;
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
     padding: 4px 8px;
     border-radius: 20px;
 }
 .bubble-btn {
-    background: rgba(255,255,255,0.6);
-    border: none;
-    font-size: 28px;
-    cursor: pointer;
-    padding: 4px 12px;
-    border-radius: 40px;
-    transition: 0.2s;
+    font-size: 26px;
 }
 
-/* 主内容区 */
+/* ========== 主内容区 ========== */
 .content-panel {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
     background: rgba(255,250,252,0.7);
-    width: 100%;
+    overflow-y: auto;
 }
 .page {
     display: none;
-    flex: 1;
-    flex-direction: column;
-    overflow: hidden;
+    height: 100%;
+    overflow-y: auto;
+    padding: 12px;
 }
 .page.active {
-    display: flex;
+    display: block;
 }
 
-/* 聊天区域 */
+/* ========== 聊天区域 ========== */
 .chat-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px 12px;
+    min-height: calc(100% - 120px);
+    padding: 12px;
+}
+.message-row {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    background: rgba(255,245,250,0.4);
+    margin-bottom: 12px;
+}
+.message-row.me {
+    justify-content: flex-end;
+}
+.message-row.other {
+    justify-content: flex-start;
+}
+.msg-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #d98ab7;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+}
+.message-row.me .msg-avatar {
+    margin-left: 8px;
+    margin-right: 0;
+}
+.bubble {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 18px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+.message-row.me .bubble {
+    background: #ffe0f0;
+}
+.time {
+    font-size: 10px;
+    color: #999;
+    margin-top: 4px;
+    text-align: right;
 }
 
-/* 底部栏 */
+/* ========== 表情包卡片样式 ========== */
+.emoji-card {
+    background-color: #ffffff !important;
+    border: 2px solid #333333 !important;
+    border-radius: 0px !important;
+    font-weight: bold;
+    width: 70px;
+    height: 70px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 !important;
+    margin: 4px 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* ========== 底部栏 ========== */
 .bottom-bar {
     background: rgba(255,235,245,0.9);
     backdrop-filter: blur(8px);
     border-top: 1px solid rgba(255,255,255,0.6);
-    padding: 10px 12px;
+    padding: 8px 12px;
     flex-shrink: 0;
 }
 .input-row {
@@ -126,9 +169,9 @@ body {
 }
 .input-row input {
     flex: 1;
-    padding: 10px 14px;
+    padding: 8px 12px;
     border: 1px solid #ffcfdf;
-    border-radius: 40px;
+    border-radius: 30px;
     font-size: 15px;
     background: white;
 }
@@ -144,7 +187,7 @@ body {
     background: #e29bc2;
     border: none;
     color: white;
-    padding: 10px 16px;
+    padding: 8px 16px;
     border-radius: 40px;
     font-weight: 500;
     cursor: pointer;
@@ -155,116 +198,48 @@ body {
 .action-btn.plus-mode {
     background-color: #e29bc2;
     font-size: 20px;
-    padding: 8px 14px;
+    padding: 6px 14px;
 }
 .bottom-actions {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     margin-top: 8px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    align-items: center;
+    flex-wrap: wrap;
+}
+.bottom-actions .action-btn {
+    background: #f0d5e5;
+    color: #a5557e;
+    font-size: 14px;
+    padding: 6px 12px;
 }
 .file-input-hidden {
     display: none;
 }
 
-/* 消息气泡 */
-.message-row {
-    display: flex;
-    width: 100%;
-    margin-bottom: 8px;
-}
-.message-row.me {
-    justify-content: flex-end;
-}
-.message-row.other {
-    justify-content: flex-start;
-}
-.msg-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(255,215,225,0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: bold;
-    font-size: 16px;
-    color: #b35f8e;
-    flex-shrink: 0;
-    cursor: pointer;
-}
-.message-row.me .msg-avatar {
-    margin-left: 8px;
-}
-.message-row.other .msg-avatar {
-    margin-right: 8px;
-}
-.msg-content {
-    max-width: 70%;
-    display: flex;
-    flex-direction: column;
-}
-.message-row.me .msg-content {
-    align-items: flex-end;
-}
-.message-row.other .msg-content {
-    align-items: flex-start;
-}
-.bubble {
-    background: #ffffffdd;
-    backdrop-filter: blur(4px);
-    padding: 10px 14px;
-    border-radius: 20px;
-    word-wrap: break-word;
-    cursor: pointer;
-}
-.message-row.me .bubble {
-    background: #ffe0f0dd;
-    border-top-right-radius: 4px;
-}
-.message-row.other .bubble {
-    background: #ffffffdd;
-    border-top-left-radius: 4px;
-}
-.time {
-    font-size: 10px;
-    color: #bf8aa8;
-    margin-top: 4px;
-    text-align: right;
-}
-
-/* 设置页面样式 */
+/* ========== 设置页面样式 ========== */
 .scroll-page {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
+    padding: 12px;
 }
 .setting-row {
     margin-bottom: 12px;
 }
 .setting-row label {
     display: inline-block;
-    width: 140px;
+    width: 120px;
     color: #a5557e;
 }
 .setting-row input {
     padding: 6px;
-    border-radius: 30px;
+    border-radius: 20px;
     border: 1px solid #ffbfd5;
-    background: white;
-    width: 120px;
 }
 button {
     background: #f5d6e5;
     border: none;
-    padding: 6px 14px;
-    border-radius: 30px;
-    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
     cursor: pointer;
-    color: #8a5472;
+    margin: 4px;
 }
 .danger-btn {
     background: #ffe0e7;
@@ -272,385 +247,15 @@ button {
 }
 hr {
     margin: 12px 0;
-    border-color: #ffd4e4;
 }
 .card-textarea {
     width: 100%;
-    padding: 10px;
-    border-radius: 20px;
-    border: 1px solid #ffbfd5;
-    font-size: 14px;
-    resize: vertical;
-}
-.reply-preview {
-    background: #f9e6f0;
-    border-radius: 20px;
-    padding: 8px 12px;
-    margin-top: 12px;
-    font-size: 12px;
-    color: #b35f8e;
-}
-.card-input-area {
-    background: #fff5fa;
-    border-radius: 28px;
-    padding: 12px;
-    margin-bottom: 20px;
-}
-.add-method-buttons {
-    display: flex;
-    gap: 12px;
-    margin-top: 8px;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-}
-.card-group {
-    margin-bottom: 20px;
-    border: 1px solid #ffcfdf;
-    border-radius: 28px;
-    background: rgba(255,255,255,0.7);
-    overflow: hidden;
-}
-.group-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px;
-    cursor: pointer;
-    background: #fff0f5;
-}
-.group-title {
-    font-weight: 600;
-    font-family: 'Times New Roman', Times, serif;
-    color: #b15d88;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.group-actions {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-}
-.group-content {
-    padding: 12px;
-    border-top: 1px solid #ffcfdf;
-    display: none;
-}
-.group-content.expanded {
-    display: block;
-}
-.word-card {
-    background: #fff0f5;
-    margin: 8px 0;
-    padding: 8px 12px;
-    border-radius: 24px;
-}
-
-/* 休闲页面简单样式 */
-.leisure-page {
-    padding: 16px;
-    overflow-y: auto;
-}
-.leisure-category {
-    background: rgba(255,255,255,0.7);
-    border-radius: 28px;
-    margin-bottom: 16px;
-    overflow: hidden;
-    border: 1px solid #ffcfdf;
-}
-.category-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px;
-    background: #fff0f5;
-    cursor: pointer;
-}
-.category-title {
-    font-weight: 600;
-    font-family: 'Times New Roman', Times, serif;
-    color: #b15d88;
-}
-.category-content {
-    padding: 12px;
-    border-top: 1px solid #ffcfdf;
-    display: none;
-}
-.category-content.expanded {
-    display: block;
-}
-.leisure-item-card {
-    background: #fff0f5;
-    margin: 8px 0;
-    padding: 10px 12px;
-    border-radius: 24px;
-}
-.item-name {
-    font-weight: 500;
-    color: #8a5472;
-}
-.progress-bar {
-    background: #e0d0e0;
-    border-radius: 20px;
-    height: 8px;
-    overflow: hidden;
-    margin: 8px 0;
-}
-.progress-fill {
-    background: #d98ab7;
-    height: 100%;
-    width: 0%;
-    border-radius: 20px;
-    transition: width 0.3s;
-}
-.item-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 8px;
-    justify-content: flex-end;
-}
-/* ========== style.css · 2026-06-08 14:50:00 ========== */
-.demo-btn {
-    display: block;
-    width: 90%;
-    margin: 10px auto;
-    padding: 12px;
-    background: #f0d5e5;
-    border: none;
-    border-radius: 30px;
-    font-size: 16px;
-    color: #a5557e;
-    text-align: center;
-    cursor: pointer;
-}
-.demo-btn:active {
-    background: #e2c0d4;
-    transform: scale(0.98);
-}
-/* ========== 修复底部按钮布局 ========== */
-.bottom-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 8px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-/* 示例按钮样式（开发中按钮） */
-.demo-btn {
-    background: #f0d5e5;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    color: #a5557e;
-    margin: 5px;
-    cursor: pointer;
-}
-.demo-btn:active {
-    background: #e2c0d4;
-    transform: scale(0.98);
-}
-/* 鼠标指针样式 */
-.top-left, .top-right, #starSpaceBtn, #mySpaceBtn, .avatar-small, .name, .bubble-btn {
-    cursor: pointer;
-}
-
-/* 休闲页面样式 */
-.leisure-page {
-    padding: 12px;
-}
-.leisure-category {
-    background: #fff0f5;
+    padding: 8px;
     border-radius: 16px;
-    margin-bottom: 12px;
-    overflow: hidden;
-}
-.category-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    cursor: pointer;
-    background: #f8e0ec;
-}
-.category-title {
-    font-weight: bold;
-    font-size: 16px;
-}
-.category-toggle {
-    font-size: 12px;
-    color: #999;
-}
-.category-content {
-    padding: 12px;
-    border-top: 1px solid #ffcfdf;
-}
-.leisure-section {
-    margin-bottom: 16px;
-}
-.leisure-section h4 {
-    font-size: 14px;
-    color: #b35f8e;
-    margin-bottom: 8px;
-}
-.leisure-tag {
-    display: inline-block;
-    background: #f0d5e5;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    margin: 4px;
-    color: #a5557e;
-}
-.add-item-input {
-    padding: 6px 12px;
-    border-radius: 20px;
-    border: 1px solid #ffcfdf;
-    font-size: 12px;
-    width: 150px;
-}
-.add-item-btn, .invite-btn {
-    background: #e29bc2;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 20px;
-    color: white;
-    font-size: 12px;
-    margin-left: 8px;
-    cursor: pointer;
-}
-.invite-btn {
-    background: #07c160;
-}
-/* ========== 2026-06-08 21:00:00 添加 ========== */
-.top-left, .top-right, #starSpaceBtn, #mySpaceBtn, .avatar-small, .name, .bubble-btn {
-    cursor: pointer;
-    transition: transform 0.1s ease;
-}
-.top-left:active, .top-right:active, #starSpaceBtn:active, #mySpaceBtn:active,
-.avatar-small:active, .name:active, .bubble-btn:active {
-    transform: scale(0.95);
+    border: 1px solid #ffbfd5;
 }
 
-/* 字卡管理样式 */
-.card-group {
-    margin-bottom: 15px;
-    border: 1px solid #ffcfdf;
-    border-radius: 12px;
-    overflow: hidden;
-}
-.group-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background: #f8e0ec;
-    cursor: pointer;
-}
-.group-content {
-    padding: 10px;
-    border-top: 1px solid #ffcfdf;
-}
-.word-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-    margin: 5px 0;
-    background: #fff0f5;
-    border-radius: 8px;
-}
-.delete-card-btn {
-    background: #ffe0e7;
-    color: #d96c9e;
-    border: none;
-    padding: 2px 8px;
-    border-radius: 12px;
-    cursor: pointer;
-}
-.add-card-area {
-    margin-top: 10px;
-    display: flex;
-    gap: 8px;
-}
-.new-card-input {
-    flex: 1;
-    padding: 6px;
-    border-radius: 20px;
-    border: 1px solid #ffcfdf;
-}
-/* ========== 表情面板样式 ========== */
-.emoji-panel {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
-    z-index: 1000;
-    padding: 12px;
-    max-height: 50vh;
-    display: flex;
-    flex-direction: column;
-}
-.emoji-panel.show {
-    transform: translateY(0);
-}
-.emoji-header {
-    text-align: center;
-    padding: 10px;
-    font-weight: bold;
-    border-bottom: 1px solid #eee;
-}
-.emoji-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    padding: 12px;
-    overflow-y: auto;
-}
-.emoji-item {
-    font-size: 32px;
-    text-align: center;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 12px;
-}
-.emoji-item:active {
-    background: #e0e0e0;
-    transform: scale(0.9);
-}
-.emoji-close {
-    text-align: center;
-    padding: 10px;
-    color: #999;
-    cursor: pointer;
-    border-top: 1px solid #eee;
-}
-
-/* 系统字卡开关样式 */
-.system-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11px;
-    cursor: pointer;
-}
-.system-card-toggle {
-    width: 14px;
-    height: 14px;
-    cursor: pointer;
-}
-.toggle-label-small {
-    font-size: 11px;
-    color: #a5557e;
-}
+/* ========== 休闲页面样式 ========== */
 .leisure-page { padding: 12px; }
 .leisure-category { background: #fff0f5; border-radius: 16px; margin-bottom: 12px; }
 .category-header { display: flex; justify-content: space-between; padding: 12px; background: #f8e0ec; cursor: pointer; border-radius: 16px; }
@@ -659,6 +264,8 @@ hr {
 .add-input { padding: 6px; border-radius: 20px; border: 1px solid #ffcfdf; margin-right: 8px; }
 .add-btn, .invite-btn { background: #e29bc2; border: none; padding: 4px 12px; border-radius: 20px; cursor: pointer; }
 .invite-btn { background: #07c160; color: white; }
+
+/* ========== 字卡管理样式 ========== */
 .card-group { border: 1px solid #ffcfdf; border-radius: 12px; margin-bottom: 12px; }
 .group-header { display: flex; justify-content: space-between; padding: 10px; background: #f8e0ec; cursor: pointer; }
 .group-content { padding: 10px; border-top: 1px solid #ffcfdf; }
