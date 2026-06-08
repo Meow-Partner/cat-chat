@@ -1,243 +1,75 @@
-// ========== modules/card.js · 2026-06-08 23:30:00 ==========
+// ========== modules/card.js · 2026-06-09 ==========
 (function() {
-    if (window.CatChat && window.CatChat.card) {
-        console.log('card 模块已加载，跳过');
-        return;
-    }
-    
+    if (window.CatChat && window.CatChat.card) return;
     window.CatChat = window.CatChat || {};
     
     let userGroups = {};
-    let groupLocks = {};
-    let groupDedup = {};
-    let systemGroupName = '系统字卡';
     let systemCardsEnabled = true;
+    const systemGroupName = '系统字卡';
     
-    function saveCardData() {
-        localStorage.setItem('userGroups', JSON.stringify(userGroups));
-        localStorage.setItem('groupLocks', JSON.stringify(groupLocks));
-        localStorage.setItem('groupDedup', JSON.stringify(groupDedup));
-        localStorage.setItem('systemCardsEnabled', systemCardsEnabled);
-        updateReplyCountDisplay();
-    }
-    
-    function loadCardData() {
-        const storedGroups = localStorage.getItem('userGroups');
-        if (storedGroups) {
-            try { userGroups = JSON.parse(storedGroups); } catch(e) {}
-        }
-        const storedLocks = localStorage.getItem('groupLocks');
-        if (storedLocks) {
-            try { groupLocks = JSON.parse(storedLocks); } catch(e) {}
-        }
-        const storedDedup = localStorage.getItem('groupDedup');
-        if (storedDedup) {
-            try { groupDedup = JSON.parse(storedDedup); } catch(e) {}
-        }
-        const storedEnabled = localStorage.getItem('systemCardsEnabled');
-        if (storedEnabled !== null) systemCardsEnabled = storedEnabled === 'true';
-        
+    function save() { localStorage.setItem('userGroups', JSON.stringify(userGroups)); localStorage.setItem('systemCardsEnabled', systemCardsEnabled); updateCount(); }
+    function load() {
+        let g = localStorage.getItem('userGroups');
+        if (g) { try { userGroups = JSON.parse(g); } catch(e) {} }
+        let e = localStorage.getItem('systemCardsEnabled');
+        if (e !== null) systemCardsEnabled = e === 'true';
         if (!userGroups[systemGroupName]) {
             userGroups[systemGroupName] = [];
             if (typeof DEFAULT_CARDS_LIST !== 'undefined') {
-                for (let card of DEFAULT_CARDS_LIST) {
-                    userGroups[systemGroupName].push({ replys: [card] });
-                }
+                for (let c of DEFAULT_CARDS_LIST.slice(0, 10)) userGroups[systemGroupName].push({ replys: [c] });
             }
         }
-        
-        renderGroups();
-        updateReplyCountDisplay();
+        render();
     }
-    
-    function renderGroups() {
-        const container = document.getElementById('groupsContainer');
-        if (!container) return;
-        
+    function render() {
+        let c = document.getElementById('groupsContainer');
+        if (!c) return;
         let html = '';
-        for (let groupName in userGroups) {
-            const cards = userGroups[groupName];
-            const isSystem = (groupName === systemGroupName);
-            const isLocked = groupLocks[groupName] || false;
-            
-            html += `
-                <div class="card-group" data-group="${groupName}" data-system="${isSystem}">
-                    <div class="group-header">
-                        <span class="group-title">📁 ${groupName} (${cards.length})</span>
-                        <div class="group-actions">
-                            ${isSystem ? `
-                                <label class="system-toggle">
-                                    <input type="checkbox" class="system-card-toggle" data-group="${groupName}" ${systemCardsEnabled ? 'checked' : ''}>
-                                    <span class="toggle-label-small">启用</span>
-                                </label>
-                            ` : `
-                                <button class="lock-btn" data-group="${groupName}">${isLocked ? '🔒' : '🔓'}</button>
-                                <button class="delete-group-btn" data-group="${groupName}">🗑️</button>
-                            `}
-                        </div>
-                    </div>
-                    <div class="group-content" style="display: none;">
-                        <div class="cards-list">
-                            ${cards.map((card, idx) => `
-                                <div class="word-card">
-                                    <div class="word-text">${escapeHtml(card.replys ? card.replys[0] : card)}</div>
-                                    <button class="delete-card-btn" data-group="${groupName}" data-index="${idx}" ${isSystem && !systemCardsEnabled ? 'disabled' : ''}>删除</button>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="add-card-area">
-                            <input type="text" class="new-card-input" placeholder="新字卡内容">
-                            <button class="add-card-btn" data-group="${groupName}">添加</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        container.innerHTML = html;
-        
-        bindGroupEvents();
-        bindCardEvents();
-        bindSystemToggleEvents();
-    }
-    
-    function bindGroupEvents() {
-        document.querySelectorAll('.group-header').forEach(header => {
-            header.onclick = (e) => {
-                if (e.target.classList.contains('lock-btn') || 
-                    e.target.classList.contains('delete-group-btn') ||
-                    e.target.classList.contains('system-card-toggle') ||
-                    e.target.classList.contains('toggle-label-small')) return;
-                const content = header.parentElement.querySelector('.group-content');
-                content.style.display = content.style.display === 'none' ? 'block' : 'none';
-            };
-            
-            let pressTimer = null;
-            header.onmousedown = () => {
-                pressTimer = setTimeout(() => {
-                    const groupName = header.parentElement.getAttribute('data-group');
-                    alert(`编辑分组「${groupName}」功能开发中`);
-                    pressTimer = null;
-                }, 500);
-            };
-            header.onmouseup = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
-            header.onmouseleave = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
-        });
-        
-        document.querySelectorAll('.lock-btn').forEach(btn => {
-            btn.onclick = (e) => {
-                e.stopPropagation();
-                const groupName = btn.getAttribute('data-group');
-                groupLocks[groupName] = !groupLocks[groupName];
-                saveCardData();
-                renderGroups();
-            };
-        });
-        
-        document.querySelectorAll('.delete-group-btn').forEach(btn => {
-            btn.onclick = (e) => {
-                e.stopPropagation();
-                const groupName = btn.getAttribute('data-group');
-                if (groupName === systemGroupName) {
-                    alert('系统字卡不可删除');
-                    return;
-                }
-                if (confirm(`删除分组「${groupName}」？`)) {
-                    delete userGroups[groupName];
-                    saveCardData();
-                    renderGroups();
-                }
-            };
-        });
-    }
-    
-    function bindSystemToggleEvents() {
-        document.querySelectorAll('.system-card-toggle').forEach(toggle => {
-            toggle.onclick = (e) => {
-                e.stopPropagation();
-                systemCardsEnabled = toggle.checked;
-                saveCardData();
-                renderGroups();
-            };
-        });
-    }
-    
-    function bindCardEvents() {
-        document.querySelectorAll('.delete-card-btn').forEach(btn => {
-            btn.onclick = (e) => {
-                e.stopPropagation();
-                if (btn.disabled) return;
-                const groupName = btn.getAttribute('data-group');
-                const index = parseInt(btn.getAttribute('data-index'));
-                userGroups[groupName].splice(index, 1);
-                saveCardData();
-                renderGroups();
-            };
-        });
-        
-        document.querySelectorAll('.add-card-btn').forEach(btn => {
-            btn.onclick = (e) => {
-                e.stopPropagation();
-                const groupName = btn.getAttribute('data-group');
-                const input = btn.parentElement.querySelector('.new-card-input');
-                const text = input.value.trim();
-                if (text) {
-                    if (!userGroups[groupName]) userGroups[groupName] = [];
-                    userGroups[groupName].push({ replys: [text] });
-                    saveCardData();
-                    renderGroups();
-                    input.value = '';
-                }
-            };
-        });
-    }
-    
-    function updateReplyCountDisplay() {
-        const span = document.getElementById('totalReplyCount');
-        if (span) {
-            let total = 0;
-            for (let g in userGroups) total += userGroups[g].length;
-            span.innerText = total;
-        }
-    }
-    
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-    
-    function getAllReplies() {
-        let all = [];
         for (let g in userGroups) {
-            if (g === systemGroupName && !systemCardsEnabled) continue;
-            for (let card of userGroups[g]) {
-                all.push(card.replys ? card.replys[0] : card);
-            }
+            let isSystem = (g === systemGroupName);
+            html += `<div class="card-group">
+                <div class="group-header"><span>📁 ${g} (${userGroups[g].length})</span>
+                ${isSystem ? `<label><input type="checkbox" class="sys-toggle" ${systemCardsEnabled ? 'checked' : ''}>启用</label>` : `<button class="del-group">🗑️</button>`}
+                </div>
+                <div class="group-content" style="display:none">
+                    ${userGroups[g].map((card, idx) => `<div class="word-card">${escapeHtml(card.replys ? card.replys[0] : card)}<button class="del-card" data-g="${g}" data-i="${idx}">删除</button></div>`).join('')}
+                    <div><input type="text" class="new-card" placeholder="新字卡"><button class="add-card">添加</button></div>
+                </div>
+            </div>`;
         }
-        return all;
+        c.innerHTML = html;
+        
+        document.querySelectorAll('.group-header').forEach(h => {
+            h.onclick = (e) => { if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') { let p = h.parentElement.querySelector('.group-content'); p.style.display = p.style.display === 'none' ? 'block' : 'none'; } };
+            let timer;
+            h.onmousedown = () => { timer = setTimeout(() => { alert('编辑功能开发中'); }, 500); };
+            h.onmouseup = () => { clearTimeout(timer); };
+            h.onmouseleave = () => { clearTimeout(timer); };
+        });
+        document.querySelectorAll('.del-group').forEach(btn => {
+            btn.onclick = (e) => { e.stopPropagation(); let g = btn.parentElement.parentElement.querySelector('.group-header span').innerText.replace('📁 ', '').split(' ')[0]; if (g !== systemGroupName) { delete userGroups[g]; save(); render(); } else { alert('系统字卡不可删除'); } };
+        });
+        document.querySelectorAll('.del-card').forEach(btn => {
+            btn.onclick = (e) => { e.stopPropagation(); let g = btn.getAttribute('data-g'); let i = parseInt(btn.getAttribute('data-i')); userGroups[g].splice(i, 1); save(); render(); };
+        });
+        document.querySelectorAll('.add-card').forEach(btn => {
+            btn.onclick = (e) => { e.stopPropagation(); let input = btn.parentElement.querySelector('.new-card'); let txt = input.value.trim(); if (txt) { let g = btn.parentElement.parentElement.parentElement.querySelector('.group-header span').innerText.replace('📁 ', '').split(' ')[0]; userGroups[g].push({ replys: [txt] }); save(); render(); } };
+        });
+        document.querySelectorAll('.sys-toggle').forEach(t => {
+            t.onclick = (e) => { e.stopPropagation(); systemCardsEnabled = t.checked; save(); };
+        });
     }
+    function updateCount() { let s = document.getElementById('totalReplyCount'); if (s) { let t = 0; for (let g in userGroups) t += userGroups[g].length; s.innerText = t; } }
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+    function getAllReplies() { let all = []; for (let g in userGroups) { if (g === systemGroupName && !systemCardsEnabled) continue; for (let c of userGroups[g]) all.push(c.replys ? c.replys[0] : c); } return all; }
     
-    window.CatChat.card = {
-        userGroups: userGroups,
-        saveCardData: saveCardData,
-        loadCardData: loadCardData,
-        renderGroups: renderGroups,
-        getAllReplies: getAllReplies,
-        systemCardsEnabled: () => systemCardsEnabled
-    };
-    
+    window.CatChat.card = { save, load, render, getAllReplies };
     window.userGroups = userGroups;
-    window.saveGroups = saveCardData;
-    window.loadGroups = loadCardData;
-    window.renderGroups = renderGroups;
+    window.saveGroups = save;
+    window.loadGroups = load;
+    window.renderGroups = render;
     window.getAllReplies = getAllReplies;
-    window.updateReplyCountDisplay = updateReplyCountDisplay;
-    
-    loadCardData();
-    
+    window.updateReplyCountDisplay = updateCount;
+    load();
     console.log('✅ card 模块已加载');
 })();
