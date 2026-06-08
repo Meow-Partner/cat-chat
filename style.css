@@ -427,3 +427,29 @@ hr {
     background: #e2c0d4;
     transform: scale(0.98);
 }
+/* ========== 修复底部按钮布局 ========== */
+.bottom-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* 示例按钮样式（开发中按钮） */
+.demo-btn {
+    background: #f0d5e5;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #a5557e;
+    margin: 5px;
+    cursor: pointer;
+}
+.demo-btn:active {
+    background: #e2c0d4;
+    transform: scale(0.98);
+}
