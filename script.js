@@ -1,4 +1,4 @@
-// ========== script.js · v1.0.2 · 2026-06-08 ==========
+// ========== script.js · v1.1.0 · 2026-06-08 ==========
 // import { LocalNotifications } from '@capacitor/local-notifications';
 
 const LocalNotifications = {
@@ -7,45 +7,55 @@ const LocalNotifications = {
 
 document.addEventListener('DOMContentLoaded', function() {
 
+    // 页面元素
     const chatPage = document.getElementById('chat-page');
     const leisurePage = document.getElementById('leisure-page');
-    const managePage = document.getElementById('manage-page');
+    const hisSpacePage = document.getElementById('his-space-page');
+    const mySpacePage = document.getElementById('my-space-page');
     
-    function showChatPage() {
-        if (chatPage) chatPage.classList.add('active');
-        if (leisurePage) leisurePage.classList.remove('active');
-        if (managePage) managePage.classList.remove('active');
-        console.log('切换到聊天页');
+    // 页面切换函数
+    function showChat() {
+        chatPage.classList.add('active');
+        leisurePage.classList.remove('active');
+        hisSpacePage.classList.remove('active');
+        mySpacePage.classList.remove('active');
     }
     
-    function showLeisurePage() {
-        if (chatPage) chatPage.classList.remove('active');
-        if (leisurePage) leisurePage.classList.add('active');
-        if (managePage) managePage.classList.remove('active');
-        console.log('切换到休闲页');
+    function showLeisure() {
+        chatPage.classList.remove('active');
+        leisurePage.classList.add('active');
+        hisSpacePage.classList.remove('active');
+        mySpacePage.classList.remove('active');
     }
     
-    function showManagePage() {
-        if (chatPage) chatPage.classList.remove('active');
-        if (leisurePage) leisurePage.classList.remove('active');
-        if (managePage) managePage.classList.add('active');
-        console.log('切换到设置页');
+    function showHisSpace() {
+        chatPage.classList.remove('active');
+        leisurePage.classList.remove('active');
+        hisSpacePage.classList.add('active');
+        mySpacePage.classList.remove('active');
     }
     
-    // 强制绑定所有顶部栏按钮
-    const starMenuBtn = document.getElementById('starMenuBtn');
-    const settingsBtn = document.getElementById('settingsBtn');
-    const leisureBubbleBtn = document.getElementById('leisureBubbleBtn');
-    const partnerAvatar = document.getElementById('partnerAvatar');
-    const myAvatar = document.getElementById('myAvatar');
+    function showMySpace() {
+        chatPage.classList.remove('active');
+        leisurePage.classList.remove('active');
+        hisSpacePage.classList.remove('active');
+        mySpacePage.classList.add('active');
+    }
     
-    if (starMenuBtn) starMenuBtn.onclick = showManagePage;
-    if (settingsBtn) settingsBtn.onclick = showManagePage;
-    if (leisureBubbleBtn) leisureBubbleBtn.onclick = showLeisurePage;
-    if (partnerAvatar) partnerAvatar.onclick = showChatPage;
-    if (myAvatar) myAvatar.onclick = showManagePage;
+    // 顶部栏按钮绑定
+    document.getElementById('starSpaceBtn').onclick = showHisSpace;
+    document.getElementById('mySpaceBtn').onclick = showMySpace;
+    document.getElementById('leisureBubbleBtn').onclick = showLeisure;
     
-    // 底部输入栏
+    // 示例按钮点击（全部 alert，方便你以后改成真实功能）
+    const demoBtns = document.querySelectorAll('.demo-btn');
+    demoBtns.forEach(btn => {
+        btn.onclick = () => {
+            alert(`功能开发中：${btn.textContent}`);
+        };
+    });
+    
+    // 底部输入栏（保留原来的逻辑）
     const msgInput = document.getElementById('msgInput');
     const actionBtn = document.getElementById('actionBtn');
     const fileInput = document.getElementById('fileInput');
@@ -125,6 +135,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loadAllData();
     }
     
-    showChatPage();
-    console.log('✅ v1.0.2 已加载，所有按钮已绑定');
+    showChat();
+    console.log('✅ v1.1.0 已加载（他的空间/我的空间分开）');
 });
