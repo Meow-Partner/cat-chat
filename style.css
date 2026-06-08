@@ -409,3 +409,21 @@ hr {
     margin-top: 8px;
     justify-content: flex-end;
 }
+/* ========== style.css · 2026-06-08 14:50:00 ========== */
+.demo-btn {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 12px;
+    background: #f0d5e5;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    color: #a5557e;
+    text-align: center;
+    cursor: pointer;
+}
+.demo-btn:active {
+    background: #e2c0d4;
+    transform: scale(0.98);
+}
