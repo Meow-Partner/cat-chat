@@ -1,4 +1,4 @@
-<!-- ========== index.html · 2026-06-08 17:30:00 ========== -->
+<!-- ========== index.html · 2026-06-08 19:00:00 ========== -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -47,13 +47,22 @@
 
         <!-- 休闲页面 -->
         <div id="leisure-page" class="page">
-            <div class="leisure-page" id="leisureContainer"></div>
+            <div id="leisureContainer"></div>
         </div>
 
         <!-- 他的空间（沈星回） -->
         <div id="his-space-page" class="page">
             <div class="scroll-page">
                 <h3>⭐ 沈星回的空间</h3>
+                
+                <!-- 个人设置 -->
+                <div class="profile-section">
+                    <h4>⚙️ 个人设置</h4>
+                    <div class="setting-row"><label>给他的备注:</label><input type="text" id="partnerNoteInput" placeholder="给沈星回的备注"></div>
+                    <div class="setting-row"><label>个性签名:</label><input type="text" id="partnerSignatureInput" placeholder="他的个性签名"></div>
+                    <button id="saveHisSettingsBtn">💾 保存设置</button>
+                </div>
+                
                 <!-- 字卡管理 -->
                 <div class="card-section">
                     <h4>📚 字卡管理</h4>
@@ -68,6 +77,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <!-- 回复设置 -->
                 <div class="reply-section">
                     <h4>⚡ 回复设置</h4>
@@ -77,13 +87,6 @@
                     <div class="reply-preview">📚 当前字卡库共有 <span id="totalReplyCount">0</span> 条回复</div>
                     <button id="saveReplySettings">保存设置</button>
                 </div>
-                <!-- 他的其他功能 -->
-                <div class="other-section">
-                    <h4>📔 其他</h4>
-                    <button id="hisDiaryBtn" class="demo-btn">📔 他的日记（开发中）</button>
-                    <button id="hisMomentsBtn" class="demo-btn">🌐 他的朋友圈（开发中）</button>
-                    <button id="hisCollectionBtn" class="demo-btn">❤️ 他的收藏（开发中）</button>
-                </div>
             </div>
         </div>
 
@@ -91,15 +94,16 @@
         <div id="my-space-page" class="page">
             <div class="scroll-page">
                 <h3>🐱 我的空间</h3>
+                
                 <!-- 个人设置 -->
                 <div class="profile-section">
-                    <h4>👤 个人设置</h4>
-                    <div class="setting-row"><label>我的昵称:</label><input type="text" id="myNicknameInput" placeholder="我"></div>
-                    <div class="setting-row"><label>我的头像文字:</label><input type="text" id="myAvatarText" placeholder="🐱" maxlength="6"></div>
-                    <div class="setting-row"><label>对方昵称:</label><input type="text" id="partnerNicknameInput" placeholder="沈星回"></div>
-                    <div class="setting-row"><label>对方头像文字:</label><input type="text" id="partnerAvatarText" placeholder="⭐" maxlength="6"></div>
+                    <h4>⚙️ 个人设置</h4>
+                    <div class="setting-row"><label>我的姓名:</label><input type="text" id="myNameInput" placeholder="我"></div>
+                    <div class="setting-row"><label>我的昵称:</label><input type="text" id="myNicknameInput" placeholder="昵称"></div>
+                    <div class="setting-row"><label>我的个性签名:</label><input type="text" id="mySignatureInput" placeholder="个性签名"></div>
                     <button id="saveProfileBtn">💾 保存设置</button>
                 </div>
+                
                 <!-- 数据管理 -->
                 <div class="data-section">
                     <h4>📦 数据管理</h4>
@@ -110,13 +114,6 @@
                         <button id="clearAllChats" class="danger-btn">清空聊天记录</button>
                         <button id="resetAllData" class="danger-btn">恢复出厂设置</button>
                     </div>
-                </div>
-                <!-- 我的其他功能 -->
-                <div class="other-section">
-                    <h4>📔 其他</h4>
-                    <button id="myDiaryBtn" class="demo-btn">📔 我的日记（开发中）</button>
-                    <button id="myMomentsBtn" class="demo-btn">🌐 我的朋友圈（开发中）</button>
-                    <button id="myCollectionBtn" class="demo-btn">❤️ 我的收藏（开发中）</button>
                 </div>
             </div>
         </div>
