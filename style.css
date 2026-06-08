@@ -272,3 +272,26 @@ hr {
 .word-card { display: flex; justify-content: space-between; padding: 6px; margin: 4px 0; background: #fff0f5; border-radius: 8px; }
 .del-card, .del-group { background: #ffe0e7; border: none; padding: 2px 8px; border-radius: 12px; cursor: pointer; }
 .new-card { padding: 4px; border-radius: 12px; border: 1px solid #ffcfdf; margin-right: 8px; }
+
+/* 表情包卡片样式 */
+.emoji-card {
+    background-color: #ffffff !important;
+    border: 2px solid #333333 !important;
+    border-radius: 0px !important;
+    font-weight: bold;
+    width: 70px;
+    height: 70px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 !important;
+    margin: 4px 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+
+
+
+
+
