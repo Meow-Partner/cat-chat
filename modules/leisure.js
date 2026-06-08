@@ -1,158 +1,67 @@
-// ========== modules/leisure.js · 2026-06-08 23:00:00 ==========
+// ========== modules/leisure.js · 2026-06-09 ==========
 (function() {
-    if (window.CatChat && window.CatChat.leisure) {
-        console.log('leisure 模块已加载，跳过');
-        return;
-    }
-    
+    if (window.CatChat && window.CatChat.leisure) return;
     window.CatChat = window.CatChat || {};
     
     let leisureData = {};
-    let inviteCount = 0;
-    let inviteTimer = null;
-    let isLeisureInterrupted = false;
-    
-    const leisureTypes = ['movie', 'book', 'food', 'music', 'game', 'plant'];
+    const leisureTypes = ['movie', 'book', 'food', 'music'];
     
     const defaultLeisureData = {
-        movie: { myItems: [], hisItems: ['流浪地球', '星际穿越', '你的名字。'], progress: {} },
-        book: { myItems: [], hisItems: ['不存在的骑士', '小王子'], progress: {} },
-        food: { myItems: [], hisItems: ['火锅', '烤肉', '番茄炒蛋'], progress: {} },
-        music: { myItems: [], hisItems: ['周杰伦', '告五人'], progress: {} },
-        game: { myItems: [], hisItems: ['五子棋', '猜数字'], progress: {} },
-        plant: { myItems: [], hisItems: ['多肉植物', '绿萝'], progress: {} }
+        movie: { myItems: [], hisItems: ['流浪地球', '你的名字。'] },
+        book: { myItems: [], hisItems: ['不存在的骑士', '小王子'] },
+        food: { myItems: [], hisItems: ['火锅', '番茄炒蛋'] },
+        music: { myItems: [], hisItems: ['周杰伦', '告五人'] }
     };
     
-    function saveLeisureData() {
-        localStorage.setItem('leisure_data', JSON.stringify(leisureData));
-    }
-    
-    function loadLeisureData() {
+    function save() { localStorage.setItem('leisure_data', JSON.stringify(leisureData)); }
+    function load() {
         const stored = localStorage.getItem('leisure_data');
-        if (stored) {
-            try {
-                leisureData = JSON.parse(stored);
-            } catch(e) {}
-        }
-        for (let type of leisureTypes) {
-            if (!leisureData[type]) {
-                leisureData[type] = defaultLeisureData[type];
-            }
-        }
-        renderLeisurePage();
+        if (stored) { try { leisureData = JSON.parse(stored); } catch(e) {} }
+        for (let t of leisureTypes) { if (!leisureData[t]) leisureData[t] = defaultLeisureData[t]; }
+        render();
     }
-    
-    function renderLeisurePage() {
-        const container = document.getElementById('leisureContainer');
-        if (!container) return;
-        
+    function render() {
+        const c = document.getElementById('leisureContainer');
+        if (!c) return;
         let html = '<div class="leisure-page">';
-        for (let type of leisureTypes) {
-            const typeName = getTypeName(type);
-            const data = leisureData[type] || defaultLeisureData[type];
-            html += `
-                <div class="leisure-category" data-type="${type}">
-                    <div class="category-header">
-                        <span class="category-title">${typeName}</span>
-                        <span class="category-toggle">▼</span>
-                    </div>
-                    <div class="category-content" style="display: none;">
-                        <div class="leisure-section">
-                            <h4>⭐ 他的收藏</h4>
-                            <div class="his-items">${data.hisItems.map(item => `<span class="leisure-tag">${item}</span>`).join('')}</div>
-                        </div>
-                        <div class="leisure-section">
-                            <h4>🐱 我的收藏</h4>
-                            <div class="my-items">${data.myItems.map(item => `<span class="leisure-tag">${item}</span>`).join('')}</div>
-                            <input type="text" placeholder="添加我的收藏" class="add-item-input" data-type="${type}">
-                            <button class="add-item-btn" data-type="${type}">添加</button>
-                        </div>
-                        <div class="leisure-section">
-                            <h4>🎯 一起做</h4>
-                            <button class="invite-btn" data-type="${type}">邀请他一起${typeName}</button>
-                        </div>
-                    </div>
+        const names = { movie:'🎬电影', book:'📚书籍', food:'🍜美食', music:'🎵音乐' };
+        for (let t of leisureTypes) {
+            let d = leisureData[t];
+            html += `<div class="leisure-category">
+                <div class="category-header"><span>${names[t]}</span><span>▼</span></div>
+                <div class="category-content" style="display:none">
+                    <div><strong>⭐他的</strong>：${d.hisItems.map(i=>`<span class="tag">${i}</span>`).join('')}</div>
+                    <div><strong>🐱我的</strong>：${d.myItems.map(i=>`<span class="tag">${i}</span>`).join('')}</div>
+                    <input type="text" class="add-input" placeholder="添加我的收藏"><button class="add-btn">添加</button>
+                    <button class="invite-btn">邀请一起</button>
                 </div>
-            `;
+            </div>`;
         }
         html += '</div>';
-        container.innerHTML = html;
+        c.innerHTML = html;
         
-        bindCategoryEvents();
-        bindAddItemEvents();
-        bindInviteEvents();
-    }
-    
-    function getTypeName(type) {
-        const names = { movie: '🎬 电影', book: '📚 书籍', food: '🍜 美食', music: '🎵 音乐', game: '🎮 游戏', plant: '🌱 园艺' };
-        return names[type] || type;
-    }
-    
-    function bindCategoryEvents() {
-        document.querySelectorAll('.leisure-category .category-header').forEach(header => {
-            header.onclick = () => {
-                const content = header.parentElement.querySelector('.category-content');
-                const toggle = header.querySelector('.category-toggle');
-                if (content.style.display === 'none') {
-                    content.style.display = 'block';
-                    toggle.textContent = '▲';
-                } else {
-                    content.style.display = 'none';
-                    toggle.textContent = '▼';
-                }
+        document.querySelectorAll('.category-header').forEach(h => {
+            h.onclick = () => { let p = h.parentElement.querySelector('.category-content'); p.style.display = p.style.display === 'none' ? 'block' : 'none'; };
+        });
+        document.querySelectorAll('.add-btn').forEach(btn => {
+            btn.onclick = (e) => {
+                let input = e.target.parentElement.querySelector('.add-input');
+                let val = input.value.trim();
+                if (!val) return;
+                let cat = e.target.parentElement.parentElement;
+                let type = null;
+                for (let t of leisureTypes) if (cat.innerHTML.includes(names[t])) type = t;
+                if (type) { leisureData[type].myItems.push(val); save(); render(); }
             };
         });
-    }
-    
-    function bindAddItemEvents() {
-        document.querySelectorAll('.add-item-btn').forEach(btn => {
-            btn.onclick = () => {
-                const type = btn.getAttribute('data-type');
-                const input = btn.parentElement.querySelector('.add-item-input');
-                const value = input.value.trim();
-                if (value) {
-                    if (!leisureData[type]) leisureData[type] = defaultLeisureData[type];
-                    leisureData[type].myItems.push(value);
-                    saveLeisureData();
-                    renderLeisurePage();
-                }
-            };
-        });
-    }
-    
-    function bindInviteEvents() {
         document.querySelectorAll('.invite-btn').forEach(btn => {
-            btn.onclick = () => {
-                const type = btn.getAttribute('data-type');
-                const typeName = getTypeName(type);
-                if (window.CatChat.chat && window.CatChat.chat.addMessage) {
-                    window.CatChat.chat.addMessage(`邀请你一起${typeName}`, false);
-                } else {
-                    alert(`邀请他一起${typeName}`);
-                }
-            };
+            btn.onclick = () => alert('邀请功能开发中');
         });
     }
     
-    function triggerInvite(isActive) {
-        console.log('triggerInvite:', isActive);
-    }
-    
-    window.CatChat.leisure = {
-        leisureData: leisureData,
-        saveLeisureData: saveLeisureData,
-        loadLeisureData: loadLeisureData,
-        renderLeisurePage: renderLeisurePage,
-        triggerInvite: triggerInvite
-    };
-    
-    window.leisureData = leisureData;
-    window.saveLeisureData = saveLeisureData;
-    window.loadLeisureData = loadLeisureData;
-    window.renderLeisurePage = renderLeisurePage;
-    window.triggerInvite = triggerInvite;
-    
-    loadLeisureData();
-    
+    window.CatChat.leisure = { load, render };
+    window.loadLeisureData = load;
+    window.renderLeisurePage = render;
+    load();
     console.log('✅ leisure 模块已加载');
 })();
