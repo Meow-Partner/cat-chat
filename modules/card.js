@@ -60,38 +60,46 @@
             const isSystem = (groupName === systemGroupName);
             const isLocked = groupLocks[groupName] || false;
             
-            html += `
-                <div class="card-group" data-group="${groupName}" data-system="${isSystem}">
-                    <div class="group-header">
-                        <span class="group-title">📁 ${groupName} (${cards.length})</span>
-                        <div class="group-actions">
-                            ${isSystem ? `
-                                <label class="system-toggle">
-                                    <input type="checkbox" class="system-card-toggle" data-group="${groupName}" ${systemCardsEnabled ? 'checked' : ''}>
-                                    <span class="toggle-label-small">启用</span>
-                                </label>
-                            ` : `
-                                <button class="lock-btn" data-group="${groupName}">${isLocked ? '🔒' : '🔓'}</button>
-                                <button class="delete-group-btn" data-group="${groupName}">🗑️</button>
-                            `}
-                        </div>
-                    </div>
-                    <div class="group-content" style="display: none;">
-                        <div class="cards-list">
-                            ${cards.map((card, idx) => `
-                                <div class="word-card">
-                                    <div class="word-text">${escapeHtml(card.replys ? card.replys[0] : card)}</div>
-                                    <button class="delete-card-btn" data-group="${groupName}" data-index="${idx}" ${isSystem && !systemCardsEnabled ? 'disabled' : ''}>删除</button>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="add-card-area">
-                            <input type="text" class="new-card-input" placeholder="新字卡内容">
-                            <button class="add-card-btn" data-group="${groupName}">添加</button>
-                        </div>
+            html += `<div class="card-group" data-group="${groupName}" data-system="${isSystem}">
+                <div class="group-header">
+                    <span class="group-title">📁 ${groupName} (${cards.length})</span>
+                    <div class="group-actions">
+                        ${isSystem ? `
+                            <label class="system-toggle">
+                                <input type="checkbox" class="system-card-toggle" data-group="${groupName}" ${systemCardsEnabled ? 'checked' : ''}>
+                                <span class="toggle-label-small">启用</span>
+                            </label>
+                        ` : `
+                            <button class="lock-btn" data-group="${groupName}">${isLocked ? '🔒' : '🔓'}</button>
+                            <button class="delete-group-btn" data-group="${groupName}">🗑️</button>
+                        `}
                     </div>
                 </div>
-            `;
+                <div class="group-content" style="display: none;">`;
+            
+            if (isSystem) {
+                // 系统字卡：不显示具体内容，只显示统计和说明
+                html += `<div style="color:#999; text-align:center; padding:20px;">
+                    📚 系统字卡共 ${cards.length} 条<br>
+                    <span style="font-size:12px;">不可编辑，长按聊天记录中的回复可禁用</span>
+                </div>`;
+            } else {
+                // 用户字卡：显示完整内容，可编辑
+                html += `<div class="cards-list">
+                    ${cards.map((card, idx) => `
+                        <div class="word-card">
+                            <div class="word-text">${escapeHtml(card.replys ? card.replys[0] : card)}</div>
+                            <button class="delete-card-btn" data-group="${groupName}" data-index="${idx}">删除</button>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="add-card-area">
+                    <input type="text" class="new-card-input" placeholder="新字卡内容">
+                    <button class="add-card-btn" data-group="${groupName}">添加</button>
+                </div>`;
+            }
+            
+            html += `</div></div>`;
         }
         container.innerHTML = html;
         
@@ -165,7 +173,6 @@
         document.querySelectorAll('.delete-card-btn').forEach(btn => {
             btn.onclick = (e) => {
                 e.stopPropagation();
-                if (btn.disabled) return;
                 const groupName = btn.getAttribute('data-group');
                 const index = parseInt(btn.getAttribute('data-index'));
                 userGroups[groupName].splice(index, 1);
@@ -239,5 +246,5 @@
     
     loadCardData();
     
-    console.log('✅ card 模块已加载');
+    console.log('✅ card 模块已加载（系统字卡不可编辑）');
 })();
