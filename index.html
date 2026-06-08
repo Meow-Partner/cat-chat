@@ -1,3 +1,4 @@
+<!-- ========== index.html · 2026-06-08 14:50:00 ========== -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -35,6 +36,66 @@
                     <button id="actionBtn" class="action-btn plus-mode">➕</button>
                     <button id="sendMsgBtn" style="display: none;"></button>
                 </div>
+                <div class="bottom-actions">
+                    <button class="action-btn" id="openEmojiBtn">😊 通用表情</button>
+                    <button class="action-btn" id="openStickerBtn1">🐱 猫猫搭档1</button>
+                    <button class="action-btn" id="openStickerBtn2">🐱 猫猫搭档2</button>
+                    <input type="file" id="fileInput" class="file-input-hidden" multiple>
+                </div>
+            </div>
+        </div>
+
+        <!-- 休闲页面 -->
+        <div id="leisure-page" class="page">
+            <div class="leisure-page" id="leisureContainer">
+                <h4>🎮 休闲区</h4>
+                <button class="demo-btn" data-action="movie">🎬 一起看电影</button>
+                <button class="demo-btn" data-action="music">🎵 一起听歌</button>
+                <button class="demo-btn" data-action="food">🍜 美食推荐</button>
+                <button class="demo-btn" data-action="quiz">📖 知识竞赛</button>
+            </div>
+        </div>
+
+        <!-- 他的空间 -->
+        <div id="his-space-page" class="page">
+            <div class="scroll-page">
+                <h3>⭐ 沈星回的空间</h3>
+                <button class="demo-btn" data-action="hisCards">📚 字卡管理</button>
+                <button class="demo-btn" data-action="hisReply">⚙️ 回复设置</button>
+                <button class="demo-btn" data-action="hisDiary">📔 他的日记</button>
+                <button class="demo-btn" data-action="hisMoments">🌐 他的朋友圈</button>
+                <button class="demo-btn" data-action="hisCollection">❤️ 他的收藏</button>
+                <button class="demo-btn" data-action="hisSettings">🔧 他的设置</button>
+            </div>
+        </div>
+
+        <!-- 我的空间 -->
+        <div id="my-space-page" class="page">
+            <div class="scroll-page">
+                <h3>🐱 我的空间</h3>
+                <button class="demo-btn" data-action="myDiary">📔 我的日记</button>
+                <button class="demo-btn" data-action="myMoments">🌐 我的朋友圈</button>
+                <button class="demo-btn" data-action="myCollection">❤️ 我的收藏</button>
+                <button class="demo-btn" data-action="mySettings">🔧 我的设置</button>
+                <hr>
+                <button class="demo-btn" data-action="exportData">📤 导出数据</button>
+                <button class="demo-btn" data-action="importData">📥 导入数据</button>
+                <button class="demo-btn" data-action="resetData">🗑️ 恢复出厂</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="data/defaultCards.js"></script>
+<script src="modules/utils.js"></script>
+<script src="modules/chat.js"></script>
+<script src="modules/card.js"></script>
+<script src="modules/leisure.js?v=2"></script>
+<script src="modules/sync.js"></script> 
+<script src="modules/profile.js"></script>
+<script src="script.js"></script>
+</body>
+</html>                </div>
                 <div class="bottom-actions">
                     <button class="action-btn" id="openEmojiBtn">😊 通用表情</button>
                     <button class="action-btn" id="openStickerBtn1">🐱 猫猫搭档1</button>
