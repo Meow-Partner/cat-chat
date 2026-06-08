@@ -275,5 +275,84 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     window.CatChat.showChatPage();
+
+        // ========== 表情面板 ==========
+    const emojiBtn = document.getElementById('openEmojiBtn');
+    if (emojiBtn) {
+        emojiBtn.onclick = () => {
+            showEmojiPanel();
+        };
+    }
+    
+    function showEmojiPanel() {
+        const emojis = ['😊', '😂', '😍', '😭', '😡', '🥺', '👍', '❤️', '🎉', '✨', '🌟', '💕', '😘', '😎', '🤔', '🙏', '💪', '🐱', '🌸', '🍃', '🍎', '⚡', '⭐', '☕', '🎵', '💤', '👋', '🤗'];
+        
+        let panel = document.getElementById('emojiPanel');
+        if (!panel) {
+            panel = document.createElement('div');
+            panel.id = 'emojiPanel';
+            panel.className = 'emoji-panel';
+            panel.innerHTML = `
+                <div class="emoji-header">选择表情</div>
+                <div class="emoji-grid" id="emojiGrid"></div>
+                <div class="emoji-close">关闭</div>
+            `;
+            document.body.appendChild(panel);
+            
+            panel.querySelector('.emoji-close').onclick = () => {
+                panel.classList.remove('show');
+            };
+            
+            document.addEventListener('click', (e) => {
+                if (panel.classList.contains('show') && !panel.contains(e.target) && e.target !== emojiBtn) {
+                    panel.classList.remove('show');
+                }
+            });
+        }
+        
+        const grid = panel.querySelector('#emojiGrid');
+        grid.innerHTML = '';
+        emojis.forEach(emoji => {
+            const item = document.createElement('div');
+            item.className = 'emoji-item';
+            item.textContent = emoji;
+            item.onclick = () => {
+                if (window.CatChat.chat && window.CatChat.chat.addMessage) {
+                    window.CatChat.chat.addMessage(emoji, true);
+                }
+                panel.classList.remove('show');
+            };
+            grid.appendChild(item);
+        });
+        
+        panel.classList.add('show');
+    }
+    
+    // ========== 本地字卡初始化（不联网） ==========
+    function initLocalDefaultCards() {
+        if (typeof DEFAULT_CARDS_LIST !== 'undefined' && window.userGroups) {
+            const groupName = '系统字卡';
+            if (!window.userGroups[groupName]) {
+                window.userGroups[groupName] = [];
+            }
+            let totalAdded = 0;
+            for (let card of DEFAULT_CARDS_LIST) {
+                if (!window.userGroups[groupName].some(c => (c.replys ? c.replys[0] : c) === card)) {
+                    window.userGroups[groupName].push({ replys: [card] });
+                    totalAdded++;
+                }
+            }
+            if (totalAdded > 0) {
+                if (window.CatChat.card) window.CatChat.card.saveCardData();
+                if (window.renderGroups) window.renderGroups();
+                console.log(`本地初始化：添加了 ${totalAdded} 条系统字卡`);
+            }
+        }
+    }
+    
+    // 延迟执行，确保其他模块加载完成
+    setTimeout(() => {
+        initLocalDefaultCards();
+    }, 500);
     console.log('✅ script.js 已加载');
 });
