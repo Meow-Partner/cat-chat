@@ -1,45 +1,69 @@
-// ========== script.js · 2026-06-09 04:00:00 ==========
+// ========== script.js · 2026-06-09 最终版 ==========
 window.CatChat = window.CatChat || {};
 
 // 页面切换函数
 window.CatChat.showChatPage = function() {
-    document.getElementById('chat-page').classList.add('active');
-    document.getElementById('leisure-page').classList.remove('active');
-    document.getElementById('his-space-page').classList.remove('active');
-    document.getElementById('my-space-page').classList.remove('active');
+    const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
+    pages.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
+    const chatPage = document.getElementById('chat-page');
+    if(chatPage) chatPage.classList.add('active');
 };
 window.CatChat.showLeisurePage = function() {
-    document.getElementById('chat-page').classList.remove('active');
-    document.getElementById('leisure-page').classList.add('active');
-    document.getElementById('his-space-page').classList.remove('active');
-    document.getElementById('my-space-page').classList.remove('active');
+    const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
+    pages.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
+    const leisurePage = document.getElementById('leisure-page');
+    if(leisurePage) leisurePage.classList.add('active');
 };
 window.CatChat.showHisSpace = function() {
-    document.getElementById('chat-page').classList.remove('active');
-    document.getElementById('leisure-page').classList.remove('active');
-    document.getElementById('his-space-page').classList.add('active');
-    document.getElementById('my-space-page').classList.remove('active');
+    const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
+    pages.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
+    const hisSpace = document.getElementById('his-space-page');
+    if(hisSpace) hisSpace.classList.add('active');
 };
 window.CatChat.showMySpace = function() {
-    document.getElementById('chat-page').classList.remove('active');
-    document.getElementById('leisure-page').classList.remove('active');
-    document.getElementById('his-space-page').classList.remove('active');
-    document.getElementById('my-space-page').classList.add('active');
+    const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
+    pages.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
+    const mySpace = document.getElementById('my-space-page');
+    if(mySpace) mySpace.classList.add('active');
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    // 绑定头像切换
+    // 获取按钮元素
     const starSpaceBtn = document.getElementById('starSpaceBtn');
     const mySpaceBtn = document.getElementById('mySpaceBtn');
-    if(starSpaceBtn) starSpaceBtn.onclick = window.CatChat.showHisSpace;
-    if(mySpaceBtn) mySpaceBtn.onclick = window.CatChat.showMySpace;
-    
-    // 底部输入栏
+    const leisureBubbleBtn = document.getElementById('leisureBubbleBtn');
     const msgInput = document.getElementById('msgInput');
     const actionBtn = document.getElementById('actionBtn');
     const fileInput = document.getElementById('fileInput');
     const diceBtn = document.getElementById('diceBtn');
+    const emojiBtn = document.getElementById('openEmojiBtn');
+    const stickerBtn = document.getElementById('openStickerBtn1');
+    const stickerBtn2 = document.getElementById('openStickerBtn2');
+    const bottomBar = document.querySelector('.bottom-bar');
+    const chatArea = document.querySelector('.chat-area');
     
+    // 绑定头像切换
+    if(starSpaceBtn) starSpaceBtn.onclick = window.CatChat.showHisSpace;
+    if(mySpaceBtn) mySpaceBtn.onclick = window.CatChat.showMySpace;
+    
+    // 泡泡：单击回聊天，双击进休闲
+    if(leisureBubbleBtn) {
+        let clickTimer = null;
+        leisureBubbleBtn.onclick = function() {
+            if(clickTimer) {
+                clearTimeout(clickTimer);
+                clickTimer = null;
+                window.CatChat.showLeisurePage();
+            } else {
+                clickTimer = setTimeout(function() {
+                    window.CatChat.showChatPage();
+                    clickTimer = null;
+                }, 200);
+            }
+        };
+    }
+    
+    // 底部输入栏
     function updateActionButton() {
         if(!msgInput || !actionBtn) return;
         const hasText = msgInput.value.trim().length > 0;
@@ -101,29 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // 泡泡：单击回聊天，双击进休闲
-    const leisureBubbleBtn = document.getElementById('leisureBubbleBtn');
-    if(leisureBubbleBtn) {
-        let clickTimer = null;
-        leisureBubbleBtn.onclick = function() {
-            if(clickTimer) {
-                clearTimeout(clickTimer);
-                clickTimer = null;
-                window.CatChat.showLeisurePage();
-            } else {
-                clickTimer = setTimeout(function() {
-                    window.CatChat.showChatPage();
-                    clickTimer = null;
-                }, 200);
-            }
-        };
-    }
-    
     // 通用表情面板
-    const emojiBtn = document.getElementById('openEmojiBtn');
-    const bottomBar = document.querySelector('.bottom-bar');
-    const chatArea = document.querySelector('.chat-area');
-    
     if(emojiBtn && bottomBar && chatArea) {
         emojiBtn.onclick = () => {
             let panel = document.getElementById('emojiPushPanel');
@@ -162,10 +164,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 聊天语录面板
-    const stickerBtn = document.getElementById('openStickerBtn1');
     if(stickerBtn && bottomBar && chatArea) {
         stickerBtn.innerText = '💬 聊天语录';
-        const stickerBtn2 = document.getElementById('openStickerBtn2');
         if(stickerBtn2) stickerBtn2.style.display = 'none';
         
         stickerBtn.onclick = () => {
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     else item.style.fontSize = '18px';
                     item.onclick = () => {
                         if(window.CatChat.chat && window.CatChat.chat.addMessage) {
-                            window.CatChat.chat.addMessage(text, true);
+                            window.CatChat.chat.addMessage(text, true, null, { isSticker: true });
                         }
                         panel.style.height = '0';
                         setTimeout(() => { if(chatArea) chatArea.scrollTop = chatArea.scrollHeight; }, 80);
@@ -208,8 +208,8 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => { if(chatArea) chatArea.scrollTop = chatArea.scrollHeight; }, 50);
         };
     }
-
-        // ========== 双击头像详细页面 ==========
+    
+    // ========== 双击头像详细页面 ==========
     function showDetailPage(title, items) {
         let overlay = document.getElementById('detailOverlay');
         if (!overlay) {
@@ -231,7 +231,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 沈星回头像双击
-    const starSpaceBtn = document.getElementById('starSpaceBtn');
     if (starSpaceBtn) {
         let starTimer = null;
         starSpaceBtn.onclick = function(e) {
@@ -250,7 +249,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 我的头像双击
-    const mySpaceBtn = document.getElementById('mySpaceBtn');
     if (mySpaceBtn) {
         let myTimer = null;
         mySpaceBtn.onclick = function(e) {
