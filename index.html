@@ -1,4 +1,4 @@
-<!-- ========== index.html · 2026-06-08 14:50:00 ========== -->
+<!-- ========== index.html · 2026-06-08 17:30:00 ========== -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="phone">
-    <!-- 顶部栏：左(他的空间) 中(休闲) 右(我的空间) -->
+    <!-- 顶部栏 -->
     <div class="new-top-bar">
         <div class="top-left" id="starSpaceBtn">
             <div class="avatar-small" id="partnerAvatar">⭐</div>
@@ -26,7 +26,7 @@
     </div>
 
     <div class="content-panel">
-        <!-- 聊天页面（默认） -->
+        <!-- 聊天页面 -->
         <div id="chat-page" class="page active">
             <div class="chat-area" id="chatArea"></div>
             <div class="bottom-bar">
@@ -47,100 +47,77 @@
 
         <!-- 休闲页面 -->
         <div id="leisure-page" class="page">
-            <div class="leisure-page" id="leisureContainer">
-                <h4>🎮 休闲区</h4>
-                <button class="demo-btn" data-action="movie">🎬 一起看电影</button>
-                <button class="demo-btn" data-action="music">🎵 一起听歌</button>
-                <button class="demo-btn" data-action="food">🍜 美食推荐</button>
-                <button class="demo-btn" data-action="quiz">📖 知识竞赛</button>
-            </div>
+            <div class="leisure-page" id="leisureContainer"></div>
         </div>
 
-        <!-- 他的空间 -->
+        <!-- 他的空间（沈星回） -->
         <div id="his-space-page" class="page">
             <div class="scroll-page">
                 <h3>⭐ 沈星回的空间</h3>
-                <button class="demo-btn" data-action="hisCards">📚 字卡管理</button>
-                <button class="demo-btn" data-action="hisReply">⚙️ 回复设置</button>
-                <button class="demo-btn" data-action="hisDiary">📔 他的日记</button>
-                <button class="demo-btn" data-action="hisMoments">🌐 他的朋友圈</button>
-                <button class="demo-btn" data-action="hisCollection">❤️ 他的收藏</button>
-                <button class="demo-btn" data-action="hisSettings">🔧 他的设置</button>
-            </div>
-        </div>
-
-        <!-- 我的空间 -->
-        <div id="my-space-page" class="page">
-            <div class="scroll-page">
-                <h3>🐱 我的空间</h3>
-                <button class="demo-btn" data-action="myDiary">📔 我的日记</button>
-                <button class="demo-btn" data-action="myMoments">🌐 我的朋友圈</button>
-                <button class="demo-btn" data-action="myCollection">❤️ 我的收藏</button>
-                <button class="demo-btn" data-action="mySettings">🔧 我的设置</button>
-                <hr>
-                <button class="demo-btn" data-action="exportData">📤 导出数据</button>
-                <button class="demo-btn" data-action="importData">📥 导入数据</button>
-                <button class="demo-btn" data-action="resetData">🗑️ 恢复出厂</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="data/defaultCards.js"></script>
-<script src="modules/utils.js"></script>
-<script src="modules/chat.js"></script>
-<script src="modules/card.js"></script>
-<script src="modules/leisure.js?v=2"></script>
-<script src="modules/sync.js"></script> 
-<script src="modules/profile.js"></script>
-<script src="script.js"></script>
-</body>
-</html>                </div>
-                <div class="bottom-actions">
-                    <button class="action-btn" id="openEmojiBtn">😊 通用表情</button>
-                    <button class="action-btn" id="openStickerBtn1">🐱 猫猫搭档1</button>
-                    <button class="action-btn" id="openStickerBtn2">🐱 猫猫搭档2</button>
-                    <input type="file" id="fileInput" class="file-input-hidden" multiple>
+                <!-- 字卡管理 -->
+                <div class="card-section">
+                    <h4>📚 字卡管理</h4>
+                    <div id="groupsContainer"></div>
+                    <button id="addGroupBtn">+ 新建分组</button>
+                    <div class="card-input-area">
+                        <textarea id="cardBulkInput" class="card-textarea" rows="4" placeholder="每行一条回复内容"></textarea>
+                        <div class="add-method-buttons">
+                            <button id="updateCardsBtn">📥 从 GitHub 更新字卡</button>
+                            <button id="addMultiLineBtn">批量添加回复</button>
+                            <button id="clearTextareaBtn" class="danger-btn">清空内容</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 回复设置 -->
+                <div class="reply-section">
+                    <h4>⚡ 回复设置</h4>
+                    <div class="setting-row"><label>回复最慢时长(秒):</label><input type="number" id="maxDelaySec" value="300"></div>
+                    <div class="setting-row"><label>回复最快时长(秒):</label><input type="number" id="minDelaySec" value="1"></div>
+                    <div class="setting-row"><label>主动发消息间隔(分钟):</label><input type="number" id="activeDelayMin" value="5"></div>
+                    <div class="reply-preview">📚 当前字卡库共有 <span id="totalReplyCount">0</span> 条回复</div>
+                    <button id="saveReplySettings">保存设置</button>
+                </div>
+                <!-- 他的其他功能 -->
+                <div class="other-section">
+                    <h4>📔 其他</h4>
+                    <button id="hisDiaryBtn" class="demo-btn">📔 他的日记（开发中）</button>
+                    <button id="hisMomentsBtn" class="demo-btn">🌐 他的朋友圈（开发中）</button>
+                    <button id="hisCollectionBtn" class="demo-btn">❤️ 他的收藏（开发中）</button>
                 </div>
             </div>
         </div>
 
-        <!-- 休闲页面 -->
-        <div id="leisure-page" class="page">
-            <div class="leisure-page" id="leisureContainer">
-                <h4>🎮 休闲区</h4>
-                <button class="demo-btn" data-action="movie">🎬 一起看电影</button>
-                <button class="demo-btn" data-action="music">🎵 一起听歌</button>
-                <button class="demo-btn" data-action="food">🍜 美食推荐</button>
-                <button class="demo-btn" data-action="quiz">📖 知识竞赛</button>
-            </div>
-        </div>
-
-        <!-- 他的空间 -->
-        <div id="his-space-page" class="page">
-            <div class="scroll-page">
-                <h3>⭐ 沈星回的空间</h3>
-                <button class="demo-btn" data-action="hisCards">📚 字卡管理</button>
-                <button class="demo-btn" data-action="hisReply">⚙️ 回复设置</button>
-                <button class="demo-btn" data-action="hisDiary">📔 他的日记</button>
-                <button class="demo-btn" data-action="hisMoments">🌐 他的朋友圈</button>
-                <button class="demo-btn" data-action="hisCollection">❤️ 他的收藏</button>
-                <button class="demo-btn" data-action="hisSettings">🔧 他的设置</button>
-            </div>
-        </div>
-
-        <!-- 我的空间 -->
+        <!-- 我的空间（用户） -->
         <div id="my-space-page" class="page">
             <div class="scroll-page">
                 <h3>🐱 我的空间</h3>
-                <button class="demo-btn" data-action="myDiary">📔 我的日记</button>
-                <button class="demo-btn" data-action="myMoments">🌐 我的朋友圈</button>
-                <button class="demo-btn" data-action="myCollection">❤️ 我的收藏</button>
-                <button class="demo-btn" data-action="mySettings">🔧 我的设置</button>
-                <hr>
-                <button class="demo-btn" data-action="exportData">📤 导出数据</button>
-                <button class="demo-btn" data-action="importData">📥 导入数据</button>
-                <button class="demo-btn" data-action="resetData">🗑️ 恢复出厂</button>
+                <!-- 个人设置 -->
+                <div class="profile-section">
+                    <h4>👤 个人设置</h4>
+                    <div class="setting-row"><label>我的昵称:</label><input type="text" id="myNicknameInput" placeholder="我"></div>
+                    <div class="setting-row"><label>我的头像文字:</label><input type="text" id="myAvatarText" placeholder="🐱" maxlength="6"></div>
+                    <div class="setting-row"><label>对方昵称:</label><input type="text" id="partnerNicknameInput" placeholder="沈星回"></div>
+                    <div class="setting-row"><label>对方头像文字:</label><input type="text" id="partnerAvatarText" placeholder="⭐" maxlength="6"></div>
+                    <button id="saveProfileBtn">💾 保存设置</button>
+                </div>
+                <!-- 数据管理 -->
+                <div class="data-section">
+                    <h4>📦 数据管理</h4>
+                    <div style="margin: 12px 0; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="file" id="importFileInput" accept=".json,.txt">
+                        <button id="importDataBtn">导入数据</button>
+                        <button id="exportFullData">导出数据(.json)</button>
+                        <button id="clearAllChats" class="danger-btn">清空聊天记录</button>
+                        <button id="resetAllData" class="danger-btn">恢复出厂设置</button>
+                    </div>
+                </div>
+                <!-- 我的其他功能 -->
+                <div class="other-section">
+                    <h4>📔 其他</h4>
+                    <button id="myDiaryBtn" class="demo-btn">📔 我的日记（开发中）</button>
+                    <button id="myMomentsBtn" class="demo-btn">🌐 我的朋友圈（开发中）</button>
+                    <button id="myCollectionBtn" class="demo-btn">❤️ 我的收藏（开发中）</button>
+                </div>
             </div>
         </div>
     </div>
