@@ -443,3 +443,10 @@ hr {
 #simpleModeStatus {
     transition: opacity 0.2s ease;
 }
+
+/* 禁止选中头像和顶部栏文字 */
+.top-left, .top-right, .avatar-small, .name, .new-top-bar span {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
