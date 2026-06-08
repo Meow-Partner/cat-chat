@@ -1,30 +1,30 @@
-// ========== script.js · 2026-06-09 03:00:00 ==========
+// ========== script.js · 2026-06-09 04:00:00 ==========
 window.CatChat = window.CatChat || {};
 
 // 页面切换函数
 window.CatChat.showChatPage = function() {
-    const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
-    pages.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
-    const chatPage = document.getElementById('chat-page');
-    if(chatPage) chatPage.classList.add('active');
+    document.getElementById('chat-page').classList.add('active');
+    document.getElementById('leisure-page').classList.remove('active');
+    document.getElementById('his-space-page').classList.remove('active');
+    document.getElementById('my-space-page').classList.remove('active');
 };
 window.CatChat.showLeisurePage = function() {
-    const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
-    pages.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
-    const leisurePage = document.getElementById('leisure-page');
-    if(leisurePage) leisurePage.classList.add('active');
+    document.getElementById('chat-page').classList.remove('active');
+    document.getElementById('leisure-page').classList.add('active');
+    document.getElementById('his-space-page').classList.remove('active');
+    document.getElementById('my-space-page').classList.remove('active');
 };
 window.CatChat.showHisSpace = function() {
-    const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
-    pages.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
-    const hisSpace = document.getElementById('his-space-page');
-    if(hisSpace) hisSpace.classList.add('active');
+    document.getElementById('chat-page').classList.remove('active');
+    document.getElementById('leisure-page').classList.remove('active');
+    document.getElementById('his-space-page').classList.add('active');
+    document.getElementById('my-space-page').classList.remove('active');
 };
 window.CatChat.showMySpace = function() {
-    const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
-    pages.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
-    const mySpace = document.getElementById('my-space-page');
-    if(mySpace) mySpace.classList.add('active');
+    document.getElementById('chat-page').classList.remove('active');
+    document.getElementById('leisure-page').classList.remove('active');
+    document.getElementById('his-space-page').classList.remove('active');
+    document.getElementById('my-space-page').classList.add('active');
 };
 
 document.addEventListener('DOMContentLoaded', function() {
