@@ -1,4 +1,4 @@
-<!-- ========== index.html · 2026-06-08 19:00:00 ========== -->
+<!-- ========== index.html · 2026-06-08 21:00:00 ========== -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -11,7 +11,7 @@
 <body>
 <div class="phone">
     <!-- 顶部栏 -->
-    <div class="new-top-bar">
+    <div class="new-top-bar" id="topBar">
         <div class="top-left" id="starSpaceBtn">
             <div class="avatar-small" id="partnerAvatar">⭐</div>
             <span class="name" id="partnerName">沈星回</span>
@@ -50,20 +50,16 @@
             <div id="leisureContainer"></div>
         </div>
 
-        <!-- 他的空间（沈星回） -->
+        <!-- 他的空间 -->
         <div id="his-space-page" class="page">
             <div class="scroll-page">
                 <h3>⭐ 沈星回的空间</h3>
-                
-                <!-- 个人设置 -->
                 <div class="profile-section">
                     <h4>⚙️ 个人设置</h4>
                     <div class="setting-row"><label>给他的备注:</label><input type="text" id="partnerNoteInput" placeholder="给沈星回的备注"></div>
                     <div class="setting-row"><label>个性签名:</label><input type="text" id="partnerSignatureInput" placeholder="他的个性签名"></div>
                     <button id="saveHisSettingsBtn">💾 保存设置</button>
                 </div>
-                
-                <!-- 字卡管理 -->
                 <div class="card-section">
                     <h4>📚 字卡管理</h4>
                     <div id="groupsContainer"></div>
@@ -77,8 +73,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- 回复设置 -->
                 <div class="reply-section">
                     <h4>⚡ 回复设置</h4>
                     <div class="setting-row"><label>回复最慢时长(秒):</label><input type="number" id="maxDelaySec" value="300"></div>
@@ -90,12 +84,10 @@
             </div>
         </div>
 
-        <!-- 我的空间（用户） -->
+        <!-- 我的空间 -->
         <div id="my-space-page" class="page">
             <div class="scroll-page">
                 <h3>🐱 我的空间</h3>
-                
-                <!-- 个人设置 -->
                 <div class="profile-section">
                     <h4>⚙️ 个人设置</h4>
                     <div class="setting-row"><label>我的姓名:</label><input type="text" id="myNameInput" placeholder="我"></div>
@@ -103,8 +95,6 @@
                     <div class="setting-row"><label>我的个性签名:</label><input type="text" id="mySignatureInput" placeholder="个性签名"></div>
                     <button id="saveProfileBtn">💾 保存设置</button>
                 </div>
-                
-                <!-- 数据管理 -->
                 <div class="data-section">
                     <h4>📦 数据管理</h4>
                     <div style="margin: 12px 0; display: flex; gap: 10px; flex-wrap: wrap;">
