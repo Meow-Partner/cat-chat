@@ -387,14 +387,14 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // ========== script.js 追加部分 · 2026-06-09 01:45:00 ==========
+// ========== script.js 追加部分 · 2026-06-09 02:00:00 ==========
 
     // ========== 通用表情面板 ==========
-    const emojiBtn = document.getElementById('openEmojiBtn');
+    // 注意：emojiBtn 已经在前面声明过了，这里直接用，不要重新 const
     const bottomBar = document.querySelector('.bottom-bar');
     const chatArea = document.querySelector('.chat-area');
     
-    if (emojiBtn && bottomBar && chatArea) {
+    if (typeof emojiBtn !== 'undefined' && emojiBtn && bottomBar && chatArea) {
         emojiBtn.onclick = () => {
             let panel = document.getElementById('emojiPushPanel');
             if (!panel) {
@@ -431,6 +431,8 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => { if(chatArea) chatArea.scrollTop = chatArea.scrollHeight; }, 50);
         };
     }
+
+    // 后面的泡泡和聊天语录代码保持不变...
 
     // ========== 泡泡：单击回聊天，双击进休闲 ==========
     const leisureBubbleBtn = document.getElementById('leisureBubbleBtn');
