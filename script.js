@@ -1,4 +1,4 @@
-// ========== script.js · 2026-06-09 最终完整版 ==========
+// ========== script.js · 2026-06-09 最终打包版 ==========
 window.CatChat = window.CatChat || {};
 
 window.CatChat.showChatPage = function() {
@@ -274,16 +274,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 topBar.style.padding = '6px 16px';
             } else {
                 topBar.innerHTML = originalHTML;
-                // 重新绑定头像事件（因为innerHTML被替换了）
                 setTimeout(function() {
                     var newStar = document.getElementById('starSpaceBtn');
                     var newMy = document.getElementById('mySpaceBtn');
-                    if (newStar) {
-                        newStar.onclick = starSpaceBtn.onclick;
-                    }
-                    if (newMy) {
-                        newMy.onclick = mySpaceBtn.onclick;
-                    }
+                    if (newStar && starSpaceBtn) newStar.onclick = starSpaceBtn.onclick;
+                    if (newMy && mySpaceBtn) newMy.onclick = mySpaceBtn.onclick;
                 }, 50);
             }
             resetInactivityTimer();
@@ -353,5 +348,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if(typeof loadAllData === 'function') loadAllData();
     window.CatChat.showChatPage();
-    console.log('✅ script.js 已加载');
+    console.log('✅ script.js 最终打包版已加载');
 });
