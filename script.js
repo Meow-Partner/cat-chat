@@ -1,49 +1,33 @@
-// ========== script.js · 2026-06-08 19:00:00 ==========
+// ========== script.js · 2026-06-08 21:00:00 ==========
 window.CatChat = window.CatChat || {};
 
-// 页面切换函数
+// 页面切换
 window.CatChat.showChatPage = function() {
     const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
-    pages.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('active');
-    });
+    pages.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
     const chatPage = document.getElementById('chat-page');
     if (chatPage) chatPage.classList.add('active');
-    console.log('切换到聊天页');
 };
 
 window.CatChat.showLeisurePage = function() {
     const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
-    pages.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('active');
-    });
+    pages.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
     const leisurePage = document.getElementById('leisure-page');
     if (leisurePage) leisurePage.classList.add('active');
-    console.log('切换到休闲页');
 };
 
 window.CatChat.showHisSpace = function() {
     const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
-    pages.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('active');
-    });
+    pages.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
     const hisSpace = document.getElementById('his-space-page');
     if (hisSpace) hisSpace.classList.add('active');
-    console.log('切换到他的空间');
 };
 
 window.CatChat.showMySpace = function() {
     const pages = ['chat-page', 'leisure-page', 'his-space-page', 'my-space-page'];
-    pages.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('active');
-    });
+    pages.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
     const mySpace = document.getElementById('my-space-page');
     if (mySpace) mySpace.classList.add('active');
-    console.log('切换到我的空间');
 };
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -149,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // 他的空间 - 保存个人设置
+    // 他的空间 - 个人设置
     const saveHisSettingsBtn = document.getElementById('saveHisSettingsBtn');
     if (saveHisSettingsBtn) {
         saveHisSettingsBtn.onclick = () => {
@@ -157,17 +141,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const partnerSignature = document.getElementById('partnerSignatureInput')?.value || '';
             localStorage.setItem('partnerNote', partnerNote);
             localStorage.setItem('partnerSignature', partnerSignature);
-            const partnerNameSpan = document.getElementById('partnerName');
-            if (partnerNameSpan) partnerNameSpan.innerText = partnerNote;
+            document.getElementById('partnerName').innerText = partnerNote;
             alert('保存成功');
         };
-        const savedNote = localStorage.getItem('partnerNote') || '沈星回';
-        const savedSignature = localStorage.getItem('partnerSignature') || '';
-        if (document.getElementById('partnerNoteInput')) document.getElementById('partnerNoteInput').value = savedNote;
-        if (document.getElementById('partnerSignatureInput')) document.getElementById('partnerSignatureInput').value = savedSignature;
+        document.getElementById('partnerNoteInput').value = localStorage.getItem('partnerNote') || '沈星回';
+        document.getElementById('partnerSignatureInput').value = localStorage.getItem('partnerSignature') || '';
     }
     
-    // 我的空间 - 保存个人设置
+    // 我的空间 - 个人设置
     const saveProfileBtn = document.getElementById('saveProfileBtn');
     if (saveProfileBtn) {
         saveProfileBtn.onclick = () => {
@@ -177,36 +158,100 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('myName', myName);
             localStorage.setItem('myNickname', myNickname);
             localStorage.setItem('mySignature', mySignature);
-            const myNameSpan = document.getElementById('myNickname');
-            if (myNameSpan) myNameSpan.innerText = myName;
+            document.getElementById('myNickname').innerText = myName;
             alert('保存成功');
         };
-        const savedName = localStorage.getItem('myName') || '我';
-        const savedNickname = localStorage.getItem('myNickname') || '';
-        const savedSignature = localStorage.getItem('mySignature') || '';
-        if (document.getElementById('myNameInput')) document.getElementById('myNameInput').value = savedName;
-        if (document.getElementById('myNicknameInput')) document.getElementById('myNicknameInput').value = savedNickname;
-        if (document.getElementById('mySignatureInput')) document.getElementById('mySignatureInput').value = savedSignature;
-        const myNameSpan = document.getElementById('myNickname');
-        if (myNameSpan) myNameSpan.innerText = savedName;
+        document.getElementById('myNameInput').value = localStorage.getItem('myName') || '我';
+        document.getElementById('myNicknameInput').value = localStorage.getItem('myNickname') || '';
+        document.getElementById('mySignatureInput').value = localStorage.getItem('mySignature') || '';
+        document.getElementById('myNickname').innerText = localStorage.getItem('myName') || '我';
     }
     
-    // 字卡相关按钮（占位）
+    // 字卡管理按钮
     const addGroupBtn = document.getElementById('addGroupBtn');
     const updateCardsBtn = document.getElementById('updateCardsBtn');
     const addMultiLineBtn = document.getElementById('addMultiLineBtn');
     const clearTextareaBtn = document.getElementById('clearTextareaBtn');
     const saveReplySettings = document.getElementById('saveReplySettings');
     
-    if (addGroupBtn) addGroupBtn.onclick = () => alert('新建分组功能开发中');
-    if (updateCardsBtn) updateCardsBtn.onclick = () => alert('从 GitHub 更新字卡功能开发中');
-    if (addMultiLineBtn) addMultiLineBtn.onclick = () => alert('批量添加功能开发中');
-    if (clearTextareaBtn) clearTextareaBtn.onclick = () => {
-        const ta = document.getElementById('cardBulkInput');
-        if (ta) ta.value = '';
-        alert('已清空');
-    };
-    if (saveReplySettings) saveReplySettings.onclick = () => alert('保存设置功能开发中');
+    if (addGroupBtn) {
+        addGroupBtn.onclick = () => {
+            const newName = prompt('请输入新分组名称');
+            if (newName && newName.trim() && window.userGroups && !window.userGroups[newName.trim()]) {
+                window.userGroups[newName.trim()] = [];
+                if (window.CatChat.card) window.CatChat.card.saveCardData();
+                if (window.renderGroups) window.renderGroups();
+            }
+        };
+    }
+    
+    if (updateCardsBtn) {
+        updateCardsBtn.onclick = async () => {
+            const DEFAULT_CARDS_URL = 'https://raw.githubusercontent.com/Meow-Partner/cat-chat/main/default_cards.json';
+            try {
+                const response = await fetch(DEFAULT_CARDS_URL);
+                const remoteCards = await response.json();
+                let totalAdded = 0;
+                for (let groupName in remoteCards) {
+                    if (!window.userGroups[groupName]) window.userGroups[groupName] = [];
+                    for (let card of remoteCards[groupName]) {
+                        if (!window.userGroups[groupName].some(c => (c.replys ? c.replys[0] : c) === card)) {
+                            window.userGroups[groupName].push({ replys: [card] });
+                            totalAdded++;
+                        }
+                    }
+                }
+                if (totalAdded > 0) {
+                    if (window.CatChat.card) window.CatChat.card.saveCardData();
+                    if (window.renderGroups) window.renderGroups();
+                    alert(`成功添加 ${totalAdded} 条字卡`);
+                } else {
+                    alert('字卡已是最新，无需更新');
+                }
+            } catch(e) {
+                alert('更新失败：网络错误\n' + e.message);
+            }
+        };
+    }
+    
+    if (addMultiLineBtn) {
+        addMultiLineBtn.onclick = () => {
+            const ta = document.getElementById('cardBulkInput');
+            if (!ta) return;
+            const lines = ta.value.split(/\r?\n/).filter(l => l.trim().length > 0);
+            if (lines.length === 0) return alert('没有有效内容');
+            const groupName = prompt('选择分组', '默认字卡');
+            if (groupName && window.userGroups) {
+                if (!window.userGroups[groupName]) window.userGroups[groupName] = [];
+                for (let line of lines) {
+                    window.userGroups[groupName].push({ replys: [line] });
+                }
+                if (window.CatChat.card) window.CatChat.card.saveCardData();
+                if (window.renderGroups) window.renderGroups();
+                alert(`添加成功`);
+            }
+        };
+    }
+    
+    if (clearTextareaBtn) {
+        clearTextareaBtn.onclick = () => {
+            const ta = document.getElementById('cardBulkInput');
+            if (ta) ta.value = '';
+            alert('已清空');
+        };
+    }
+    
+    if (saveReplySettings) {
+        saveReplySettings.onclick = () => {
+            const minDelaySec = document.getElementById('minDelaySec')?.value || 1;
+            const maxDelaySec = document.getElementById('maxDelaySec')?.value || 300;
+            const activeDelayMin = document.getElementById('activeDelayMin')?.value || 5;
+            if (window.CatChat.chat && window.CatChat.chat.setReplySettings) {
+                window.CatChat.chat.setReplySettings({ minDelaySec, maxDelaySec, activeDelayMin });
+            }
+            alert('保存成功');
+        };
+    }
     
     // 数据管理按钮
     const importDataBtn = document.getElementById('importDataBtn');
