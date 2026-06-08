@@ -277,7 +277,6 @@ document.addEventListener('DOMContentLoaded', function() {
     window.CatChat.showChatPage();
 
         // ========== 表情面板 ==========
-    const emojiBtn = document.getElementById('openEmojiBtn');
     if (emojiBtn) {
         emojiBtn.onclick = () => {
             showEmojiPanel();
