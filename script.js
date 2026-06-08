@@ -276,12 +276,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     window.CatChat.showChatPage();
 
-        // ========== 表情面板 ==========
-    if (emojiBtn) {
-        emojiBtn.onclick = () => {
-            showEmojiPanel();
-        };
-    }
+ // ========== 表情面板 ==========
+// 不要重新声明 const，直接用已有的
+if (typeof emojiBtn !== 'undefined' && emojiBtn) {
+    emojiBtn.onclick = () => {
+        showEmojiPanel();
+    };
+}
     
     function showEmojiPanel() {
         const emojis = ['😊', '😂', '😍', '😭', '😡', '🥺', '👍', '❤️', '🎉', '✨', '🌟', '💕', '😘', '😎', '🤔', '🙏', '💪', '🐱', '🌸', '🍃', '🍎', '⚡', '⭐', '☕', '🎵', '💤', '👋', '🤗'];
