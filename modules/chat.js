@@ -1,4 +1,4 @@
-// ========== 聊天模块 ==========
+// ========== 聊天模块 · 第一阶段修复版 ==========
 
 // 保存所有数据到本地存储
 function saveAllData() {
@@ -71,11 +71,15 @@ function getWeightedRandomReply() {
     return "没有字卡可以用。";
 }
 
-// 输入时触发
+// 输入时触发（修复版 - 增加容错）
 function onUserTyping() {
-    typingStatusSpan.innerText = "对方正在输入中...";
+    if (typingStatusSpan) {
+        typingStatusSpan.innerText = "对方正在输入中...";
+    }
     if (typingTimeout) clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(function() { typingStatusSpan.innerText = ""; }, 1500);
+    typingTimeout = setTimeout(function() { 
+        if (typingStatusSpan) typingStatusSpan.innerText = ""; 
+    }, 1500);
     if (inputReplyTimer) clearTimeout(inputReplyTimer);
     inputReplyTimer = setTimeout(function() {
         if (!pendingReplyTimer) {
@@ -89,7 +93,9 @@ function onUserTyping() {
         triggerInvite(false);
     }
 }
-msgInput.addEventListener('input', onUserTyping);
+if (msgInput) {
+    msgInput.addEventListener('input', onUserTyping);
+}
 
 // 添加消息
 function addMessage(text, isMe, imgSrc, isSystem) {
@@ -308,11 +314,6 @@ function addToCardHandler(text) {
     }
 }
 
-// 渲染表情包贴纸栏（已简化）
-function renderEmojiStickers() {
-    // 已移到底部操作栏，这里留空
-}
-
 // + 按钮打开文件夹（兼容 plusBtn 和 actionBtn）
 var plusButton = document.getElementById('plusBtn') || document.getElementById('actionBtn');
 if (plusButton) {
@@ -322,24 +323,29 @@ if (plusButton) {
     };
 }
 
-document.getElementById('fileInput').onchange = function(e) {
-    var files = e.target.files;
-    for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-        var reader = new FileReader();
-        reader.onload = (function(f) {
-            return function(ev) {
-                if (f.type.startsWith('image/')) {
-                    addMessage("", true, ev.target.result);
-                } else {
-                    addMessage('[文件] ' + f.name, true);
-                }
-            };
-        })(file);
-        reader.readAsDataURL(file);
-    }
-    this.value = '';
-};
+var fileInputElement = document.getElementById('fileInput');
+if (fileInputElement) {
+    fileInputElement.onchange = function(e) {
+        var files = e.target.files;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
+            reader.onload = (function(f) {
+                return function(ev) {
+                    if (typeof addMessage === 'function') {
+                        if (f.type.startsWith('image/')) {
+                            addMessage("", true, ev.target.result);
+                        } else {
+                            addMessage('[文件] ' + f.name, true);
+                        }
+                    }
+                };
+            })(file);
+            reader.readAsDataURL(file);
+        }
+        this.value = '';
+    };
+}
 
 // 获取所有回复
 function getAllReplies() {
@@ -360,8 +366,9 @@ function updateReplyCountDisplay() {
     if (span) span.innerText = getAllReplies().length; 
 }
 
-// 骰子按钮点击事件
-if (diceBtn) {
+// 骰子按钮点击事件（防止重复绑定）
+if (diceBtn && !diceBtn._hasClick) {
+    diceBtn._hasClick = true;
     diceBtn.onclick = function() {
         if (typeof addMessage === 'function') {
             addMessage('🎲 我掷出了 ' + (Math.floor(Math.random() * 6) + 1) + ' 点', true);
