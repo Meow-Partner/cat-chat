@@ -429,3 +429,17 @@ hr {
     margin-top: 8px;
     justify-content: flex-end;
 }
+/* ========== 弹窗样式 ========== */
+#detailOverlay {
+    backdrop-filter: blur(4px);
+}
+
+/* ========== 顶部栏过渡动画 ========== */
+.new-top-bar {
+    transition: all 0.2s ease;
+}
+
+/* ========== 简单模式下状态文字 ========== */
+#simpleModeStatus {
+    transition: opacity 0.2s ease;
+}
