@@ -1,4 +1,4 @@
-// ========== script.js · 2026-06-09 最终打包版 ==========
+// ========== script.js · 2026-06-09 最终正式版 ==========
 window.CatChat = window.CatChat || {};
 
 window.CatChat.showChatPage = function() {
@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if(starSpaceBtn) starSpaceBtn.onclick = window.CatChat.showHisSpace;
     if(mySpaceBtn) mySpaceBtn.onclick = window.CatChat.showMySpace;
 
+    // 泡泡：单击回聊天，双击进休闲
     if(leisureBubbleBtn) {
         var clickTimer = null;
         leisureBubbleBtn.onclick = function() {
@@ -200,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // 双击头像详细页面
+    // 双击头像详细页面（中文版）
     function showDetailPage(title, items) {
         var old = document.getElementById('detailOverlay');
         if(old) old.remove();
@@ -220,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (starSpaceBtn.timer) {
                 clearTimeout(starSpaceBtn.timer);
                 starSpaceBtn.timer = null;
-                showDetailPage('Star Space', ['His Diary', 'His Moments', 'His Collection', 'His Cards', 'His Settings']);
+                showDetailPage('⭐ 沈星回的详细空间', ['📔 他的日记', '🌐 他的朋友圈', '❤️ 他的收藏', '📚 他的字卡', '⚙️ 他的设置']);
                 e.stopPropagation();
             } else {
                 starSpaceBtn.timer = setTimeout(function() {
@@ -237,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (mySpaceBtn.timer) {
                 clearTimeout(mySpaceBtn.timer);
                 mySpaceBtn.timer = null;
-                showDetailPage('My Space', ['My Diary', 'My Moments', 'My Collection', 'My Data', 'My Settings']);
+                showDetailPage('🐱 我的详细空间', ['📔 我的日记', '🌐 我的朋友圈', '❤️ 我的收藏', '📦 我的数据', '⚙️ 我的设置']);
                 e.stopPropagation();
             } else {
                 mySpaceBtn.timer = setTimeout(function() {
@@ -348,5 +349,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if(typeof loadAllData === 'function') loadAllData();
     window.CatChat.showChatPage();
-    console.log('✅ script.js 最终打包版已加载');
+    console.log('✅ script.js 最终正式版已加载');
 });
