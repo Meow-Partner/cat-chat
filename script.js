@@ -202,29 +202,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 双击头像详细页面
     function showDetailPage(title, items) {
-        var overlay = document.getElementById('detailOverlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'detailOverlay';
-            overlay.style.cssText = 'position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:10000; display:flex; align-items:center; justify-content:center;';
-            document.body.appendChild(overlay);
-        }
-        overlay.innerHTML = '<div style="background:white; border-radius:20px; width:300px; max-height:80%; overflow-y:auto; padding:20px; text-align:center;"><h3>' + title + '</h3><div>' + items.map(function(item) { return '<div style="padding:12px; margin:8px 0; background:#f0d5e5; border-radius:12px; cursor:pointer;" onclick="alert(\'' + item + ' coming soon\')">' + item + '</div>'; }).join('') + '</div><button onclick="document.getElementById(\'detailOverlay\').style.display=\'none\'" style="margin-top:15px; padding:8px 20px; background:#e29bc2; border:none; border-radius:20px; color:white;">Back</button></div>';
-        overlay.style.display = 'flex';
+        var old = document.getElementById('detailOverlay');
+        if(old) old.remove();
+        var overlay = document.createElement('div');
+        overlay.id = 'detailOverlay';
+        overlay.style.cssText = 'position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:10000; display:flex; align-items:center; justify-content:center;';
+        var div = document.createElement('div');
+        div.style.cssText = 'background:white; border-radius:20px; width:300px; max-height:80%; overflow-y:auto; padding:20px; text-align:center;';
+        div.innerHTML = '<h3>' + title + '</h3>' + items.map(function(i) { return '<div style="padding:12px; margin:8px 0; background:#f0d5e5; border-radius:12px; cursor:pointer;" onclick="alert(\'' + i + ' 开发中\')">' + i + '</div>'; }).join('') + '<button onclick="this.closest(\'#detailOverlay\').remove()" style="margin-top:15px; padding:8px 20px; background:#e29bc2; border:none; border-radius:20px; color:white;">返回</button>';
+        overlay.appendChild(div);
+        document.body.appendChild(overlay);
     }
 
     if (starSpaceBtn) {
         starSpaceBtn.onclick = null;
         starSpaceBtn.onclick = function(e) {
-            if (starSpaceBtn.clickTimer) {
-                clearTimeout(starSpaceBtn.clickTimer);
-                starSpaceBtn.clickTimer = null;
+            if (starSpaceBtn.timer) {
+                clearTimeout(starSpaceBtn.timer);
+                starSpaceBtn.timer = null;
                 showDetailPage('Star Space', ['His Diary', 'His Moments', 'His Collection', 'His Cards', 'His Settings']);
                 e.stopPropagation();
             } else {
-                starSpaceBtn.clickTimer = setTimeout(function() {
+                starSpaceBtn.timer = setTimeout(function() {
                     window.CatChat.showHisSpace();
-                    starSpaceBtn.clickTimer = null;
+                    starSpaceBtn.timer = null;
                 }, 200);
             }
         };
@@ -233,15 +234,15 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mySpaceBtn) {
         mySpaceBtn.onclick = null;
         mySpaceBtn.onclick = function(e) {
-            if (mySpaceBtn.clickTimer) {
-                clearTimeout(mySpaceBtn.clickTimer);
-                mySpaceBtn.clickTimer = null;
+            if (mySpaceBtn.timer) {
+                clearTimeout(mySpaceBtn.timer);
+                mySpaceBtn.timer = null;
                 showDetailPage('My Space', ['My Diary', 'My Moments', 'My Collection', 'My Data', 'My Settings']);
                 e.stopPropagation();
             } else {
-                mySpaceBtn.clickTimer = setTimeout(function() {
+                mySpaceBtn.timer = setTimeout(function() {
                     window.CatChat.showMySpace();
-                    mySpaceBtn.clickTimer = null;
+                    mySpaceBtn.timer = null;
                 }, 200);
             }
         };
@@ -273,6 +274,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 topBar.style.padding = '6px 16px';
             } else {
                 topBar.innerHTML = originalHTML;
+                // 重新绑定头像事件（因为innerHTML被替换了）
+                setTimeout(function() {
+                    var newStar = document.getElementById('starSpaceBtn');
+                    var newMy = document.getElementById('mySpaceBtn');
+                    if (newStar) {
+                        newStar.onclick = starSpaceBtn.onclick;
+                    }
+                    if (newMy) {
+                        newMy.onclick = mySpaceBtn.onclick;
+                    }
+                }, 50);
             }
             resetInactivityTimer();
         }
