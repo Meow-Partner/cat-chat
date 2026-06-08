@@ -208,6 +208,98 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => { if(chatArea) chatArea.scrollTop = chatArea.scrollHeight; }, 50);
         };
     }
+
+        // ========== 双击头像详细页面 ==========
+    function showDetailPage(title, items) {
+        let overlay = document.getElementById('detailOverlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'detailOverlay';
+            overlay.style.cssText = 'position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:10000; display:flex; align-items:center; justify-content:center;';
+            document.body.appendChild(overlay);
+        }
+        overlay.innerHTML = `
+            <div style="background:white; border-radius:20px; width:300px; max-height:80%; overflow-y:auto; padding:20px; text-align:center;">
+                <h3 style="margin-bottom:15px;">${title}</h3>
+                <div style="margin-top:10px;">
+                    ${items.map(item => `<div style="padding:12px; margin:8px 0; background:#f0d5e5; border-radius:12px; cursor:pointer;" onclick="alert('「${item}」功能开发中')">${item}</div>`).join('')}
+                </div>
+                <button onclick="document.getElementById('detailOverlay').style.display='none'" style="margin-top:15px; padding:8px 20px; background:#e29bc2; border:none; border-radius:20px; color:white;">返回</button>
+            </div>
+        `;
+        overlay.style.display = 'flex';
+    }
+    
+    // 沈星回头像双击
+    const starSpaceBtn = document.getElementById('starSpaceBtn');
+    if (starSpaceBtn) {
+        let starTimer = null;
+        starSpaceBtn.onclick = function(e) {
+            if (starTimer) {
+                clearTimeout(starTimer);
+                starTimer = null;
+                showDetailPage('⭐ 沈星回的详细空间', ['📔 他的日记', '🌐 他的朋友圈', '❤️ 他的收藏', '📚 他的字卡', '⚙️ 他的设置']);
+                e.stopPropagation();
+            } else {
+                starTimer = setTimeout(() => {
+                    if (window.CatChat?.showHisSpace) window.CatChat.showHisSpace();
+                    starTimer = null;
+                }, 200);
+            }
+        };
+    }
+    
+    // 我的头像双击
+    const mySpaceBtn = document.getElementById('mySpaceBtn');
+    if (mySpaceBtn) {
+        let myTimer = null;
+        mySpaceBtn.onclick = function(e) {
+            if (myTimer) {
+                clearTimeout(myTimer);
+                myTimer = null;
+                showDetailPage('🐱 我的详细空间', ['📔 我的日记', '🌐 我的朋友圈', '❤️ 我的收藏', '📦 我的数据', '⚙️ 我的设置']);
+                e.stopPropagation();
+            } else {
+                myTimer = setTimeout(() => {
+                    if (window.CatChat?.showMySpace) window.CatChat.showMySpace();
+                    myTimer = null;
+                }, 200);
+            }
+        };
+    }
+    
+    // ========== 顶部栏双击切换模式 ==========
+    const topBar = document.querySelector('.new-top-bar');
+    if (topBar) {
+        const originalHTML = topBar.innerHTML;
+        let isSimpleMode = localStorage.getItem('topBarSimpleMode') !== 'false';
+        
+        function updateTopBarMode() {
+            if (isSimpleMode) {
+                const note = localStorage.getItem('partnerNote') || '星回';
+                topBar.innerHTML = `
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
+                        <div style="display:flex; align-items:center; gap:4px;">
+                            <span style="font-size:17px; font-weight:500; color:#2c3e50;">${note}</span>
+                            <span style="font-size:10px; color:#07c160;">● 在线</span>
+                        </div>
+                        <span id="simpleModeStatus" style="font-size:10px; color:#e29bc2; margin-top:2px; opacity:0;">对方正在输入中...</span>
+                    </div>
+                `;
+                topBar.style.justifyContent = 'center';
+                topBar.style.padding = '6px 16px';
+            } else {
+                topBar.innerHTML = originalHTML;
+            }
+        }
+        
+        topBar.ondblclick = function() {
+            isSimpleMode = !isSimpleMode;
+            localStorage.setItem('topBarSimpleMode', isSimpleMode);
+            updateTopBarMode();
+        };
+        updateTopBarMode();
+    }
     
     if(typeof loadAllData === 'function') loadAllData();
     window.CatChat.showChatPage();
