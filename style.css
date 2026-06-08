@@ -651,3 +651,17 @@ hr {
     font-size: 11px;
     color: #a5557e;
 }
+.leisure-page { padding: 12px; }
+.leisure-category { background: #fff0f5; border-radius: 16px; margin-bottom: 12px; }
+.category-header { display: flex; justify-content: space-between; padding: 12px; background: #f8e0ec; cursor: pointer; border-radius: 16px; }
+.category-content { padding: 12px; border-top: 1px solid #ffcfdf; }
+.tag { display: inline-block; background: #f0d5e5; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin: 4px; }
+.add-input { padding: 6px; border-radius: 20px; border: 1px solid #ffcfdf; margin-right: 8px; }
+.add-btn, .invite-btn { background: #e29bc2; border: none; padding: 4px 12px; border-radius: 20px; cursor: pointer; }
+.invite-btn { background: #07c160; color: white; }
+.card-group { border: 1px solid #ffcfdf; border-radius: 12px; margin-bottom: 12px; }
+.group-header { display: flex; justify-content: space-between; padding: 10px; background: #f8e0ec; cursor: pointer; }
+.group-content { padding: 10px; border-top: 1px solid #ffcfdf; }
+.word-card { display: flex; justify-content: space-between; padding: 6px; margin: 4px 0; background: #fff0f5; border-radius: 8px; }
+.del-card, .del-group { background: #ffe0e7; border: none; padding: 2px 8px; border-radius: 12px; cursor: pointer; }
+.new-card { padding: 4px; border-radius: 12px; border: 1px solid #ffcfdf; margin-right: 8px; }
