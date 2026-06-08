@@ -1,4 +1,4 @@
-// ========== script.js · 完全修复版 ==========
+// ========== script.js · v1.0.2 · 2026-06-08 ==========
 // import { LocalNotifications } from '@capacitor/local-notifications';
 
 const LocalNotifications = {
@@ -15,28 +15,37 @@ document.addEventListener('DOMContentLoaded', function() {
         if (chatPage) chatPage.classList.add('active');
         if (leisurePage) leisurePage.classList.remove('active');
         if (managePage) managePage.classList.remove('active');
+        console.log('切换到聊天页');
     }
     
     function showLeisurePage() {
         if (chatPage) chatPage.classList.remove('active');
         if (leisurePage) leisurePage.classList.add('active');
         if (managePage) managePage.classList.remove('active');
+        console.log('切换到休闲页');
     }
     
     function showManagePage() {
         if (chatPage) chatPage.classList.remove('active');
         if (leisurePage) leisurePage.classList.remove('active');
         if (managePage) managePage.classList.add('active');
+        console.log('切换到设置页');
     }
     
+    // 强制绑定所有顶部栏按钮
     const starMenuBtn = document.getElementById('starMenuBtn');
     const settingsBtn = document.getElementById('settingsBtn');
     const leisureBubbleBtn = document.getElementById('leisureBubbleBtn');
+    const partnerAvatar = document.getElementById('partnerAvatar');
+    const myAvatar = document.getElementById('myAvatar');
     
     if (starMenuBtn) starMenuBtn.onclick = showManagePage;
     if (settingsBtn) settingsBtn.onclick = showManagePage;
     if (leisureBubbleBtn) leisureBubbleBtn.onclick = showLeisurePage;
+    if (partnerAvatar) partnerAvatar.onclick = showChatPage;
+    if (myAvatar) myAvatar.onclick = showManagePage;
     
+    // 底部输入栏
     const msgInput = document.getElementById('msgInput');
     const actionBtn = document.getElementById('actionBtn');
     const fileInput = document.getElementById('fileInput');
@@ -117,5 +126,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     showChatPage();
-    console.log('✅ 完全修复版已加载');
+    console.log('✅ v1.0.2 已加载，所有按钮已绑定');
 });
